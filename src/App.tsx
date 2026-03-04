@@ -73,7 +73,7 @@ function AnimatedStat({ value, suffix = '', prefix = '' }: { value: string; suff
   }, []);
   return (
     <div ref={ref} className={`transition-all duration-700 ${visible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
-      <span className="text-4xl md:text-5xl font-extrabold gradient-text">{prefix}{value}{suffix}</span>
+      <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold gradient-text">{prefix}{value}{suffix}</span>
     </div>
   );
 }
@@ -105,48 +105,48 @@ function ScreenshotGallery({ images, label }: { images: string[]; label: string 
   return (
     <div>
       {/* Main image — full view, no crop */}
-      <div className="relative rounded-xl overflow-hidden border border-slate-700/50 bg-black mb-4 group" style={{ minHeight: 400 }}>
+      <div className="relative rounded-lg sm:rounded-xl overflow-hidden border border-slate-700/50 bg-black mb-3 sm:mb-4 group" style={{ minHeight: 200 }}>
         {imgErrors.has(activeIdx) ? (
-          <div className="w-full flex items-center justify-center bg-slate-800/50" style={{ minHeight: 400 }}>
+          <div className="w-full flex items-center justify-center bg-slate-800/50 py-16 sm:py-24 md:py-32">
             <div className="text-center">
-              <Monitor className="w-12 h-12 text-slate-600 mx-auto mb-2" />
-              <p className="text-slate-500 text-sm">{label} — Screen {activeIdx + 1}</p>
+              <Monitor className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 text-slate-600 mx-auto mb-2" />
+              <p className="text-slate-500 text-xs sm:text-sm">{label} — Screen {activeIdx + 1}</p>
             </div>
           </div>
         ) : (
           <img
             src={images[activeIdx]}
             alt={`${label} screenshot ${activeIdx + 1}`}
-            className="w-full h-auto max-h-[600px] object-contain mx-auto block transition-all duration-500"
+            className="w-full h-auto max-h-[300px] sm:max-h-[450px] md:max-h-[600px] object-contain mx-auto block transition-all duration-500"
             style={{ backgroundColor: '#0a0a0a' }}
             onError={() => setImgErrors(prev => new Set(prev).add(activeIdx))}
           />
         )}
-        {/* Nav arrows */}
-        <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/90 cursor-pointer z-10">
-          <ChevronLeft className="w-5 h-5" />
+        {/* Nav arrows - always visible on mobile */}
+        <button onClick={prev} className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-black/90 cursor-pointer z-10">
+          <ChevronLeft className="w-4 sm:w-5 h-4 sm:h-5" />
         </button>
-        <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/90 cursor-pointer z-10">
-          <ChevronRight className="w-5 h-5" />
+        <button onClick={next} className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-black/90 cursor-pointer z-10">
+          <ChevronRight className="w-4 sm:w-5 h-4 sm:h-5" />
         </button>
         {/* Counter */}
-        <div className="absolute bottom-3 right-3 bg-black/70 rounded-full px-3 py-1 text-xs text-white/80 font-medium z-10">
+        <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 bg-black/70 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs text-white/80 font-medium z-10">
           {activeIdx + 1} / {images.length}
         </div>
       </div>
-      {/* Thumbnails — bigger, clearer */}
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+      {/* Thumbnails — responsive */}
+      <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
         {images.map((img, i) => (
           <button
             key={i}
             onClick={() => setActiveIdx(i)}
-            className={`flex-shrink-0 w-28 h-20 rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-black ${
+            className={`flex-shrink-0 w-16 sm:w-20 md:w-28 h-12 sm:h-14 md:h-20 rounded-md sm:rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-black ${
               i === activeIdx ? 'border-brand-500 shadow-lg shadow-brand-500/30 scale-105' : 'border-slate-700/50 opacity-50 hover:opacity-90'
             }`}
           >
             {imgErrors.has(i) ? (
               <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                <span className="text-[10px] text-slate-500">{i + 1}</span>
+                <span className="text-[8px] sm:text-[10px] text-slate-500">{i + 1}</span>
               </div>
             ) : (
               <img
@@ -637,7 +637,7 @@ function PdfTemplate() {
       {/* ─── FOOTER ─── */}
       <div style={{ padding: '20px 60px 40px', textAlign: 'center', borderTop: '1px solid #1e293b' }}>
         <div style={{ color: textMuted, fontSize: 13 }}>
-          🧠 {NAME} · AI Developer Portfolio · Built with passion for intelligent software
+          🧠 ACLLC. · AI Developer Portfolio · Built with passion for intelligent software
         </div>
       </div>
     </div>
@@ -809,55 +809,55 @@ export default function App() {
         <button
           onClick={handleDownloadPDF}
           disabled={isGeneratingPDF}
-          className="fixed top-6 right-6 z-50 flex items-center gap-2 bg-brand-600 hover:bg-brand-500 disabled:bg-brand-800 text-white px-5 py-3 rounded-full shadow-lg shadow-brand-600/30 transition-all hover:scale-105 disabled:scale-100 cursor-pointer disabled:cursor-wait font-semibold text-sm"
+          className="fixed top-3 sm:top-6 right-3 sm:right-6 z-50 flex items-center gap-1.5 sm:gap-2 bg-brand-600 hover:bg-brand-500 disabled:bg-brand-800 text-white px-3 sm:px-5 py-2 sm:py-3 rounded-full shadow-lg shadow-brand-600/30 transition-all hover:scale-105 disabled:scale-100 cursor-pointer disabled:cursor-wait font-semibold text-xs sm:text-sm"
         >
           {isGeneratingPDF ? (
-            <><Loader2 className="w-4 h-4 animate-spin" /> Generating PDF...</>
+            <><Loader2 className="w-3.5 sm:w-4 h-3.5 sm:h-4 animate-spin" /> <span className="hidden sm:inline">Generating...</span><span className="sm:hidden">PDF...</span></>
           ) : (
-            <><Download className="w-4 h-4" /> Download PDF</>
+            <><Download className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> <span className="hidden sm:inline">Download PDF</span><span className="sm:hidden">PDF</span></>
           )}
         </button>
 
         {/* Loading overlay */}
         {isGeneratingPDF && (
-          <div className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center">
-            <div className="bg-slate-900 border border-brand-500/30 rounded-2xl p-8 text-center max-w-sm mx-4">
-              <Loader2 className="w-12 h-12 text-brand-400 animate-spin mx-auto mb-4" />
-              <h3 className="text-xl font-bold mb-2">Generating PDF</h3>
-              <p className="text-slate-400 text-sm">Creating your portfolio PDF with all screenshots. This may take a moment...</p>
+          <div className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-slate-900 border border-brand-500/30 rounded-xl sm:rounded-2xl p-5 sm:p-8 text-center max-w-sm w-full mx-4">
+              <Loader2 className="w-8 sm:w-12 h-8 sm:h-12 text-brand-400 animate-spin mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-bold mb-2">Generating PDF</h3>
+              <p className="text-slate-400 text-xs sm:text-sm">Creating your portfolio PDF with all screenshots. This may take a moment...</p>
             </div>
           </div>
         )}
 
         {/* ═══════════════ HERO ═══════════════ */}
-        <header className="relative px-6 pt-16 pb-20 md:pt-24 md:pb-28 max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16">
-            <div className="flex-1 text-center md:text-left">
-              <div className="inline-flex items-center gap-2 bg-brand-950/60 border border-brand-500/30 rounded-full px-4 py-1.5 text-sm text-brand-300 mb-6">
-                <Sparkles className="w-4 h-4 text-brand-400" />
+        <header className="relative px-4 sm:px-6 pt-12 sm:pt-16 pb-16 sm:pb-20 md:pt-24 md:pb-28 max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 sm:gap-10 md:gap-16">
+            <div className="flex-1 text-center md:text-left order-2 md:order-1">
+              <div className="inline-flex items-center gap-2 bg-brand-950/60 border border-brand-500/30 rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm text-brand-300 mb-4 sm:mb-6">
+                <Sparkles className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-brand-400" />
                 Top Rated · AI & Full-Stack Developer
               </div>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-[1.08] tracking-tight mb-4">
-                I Build <span className="gradient-text">AI Products</span><br />That Actually Work
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-3 sm:mb-4">
+                I Build <span className="gradient-text">AI Products</span><br className="hidden sm:block" /><span className="sm:hidden"> </span>That Actually Work
               </h1>
-              <p className="text-base md:text-lg text-brand-300 font-semibold mb-3">{NAME} — AI Engineer & Full-Stack Developer</p>
-              <p className="text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed mb-8">
+              <p className="text-sm sm:text-base md:text-lg text-brand-300 font-semibold mb-2 sm:mb-3">{NAME} — AI Engineer & Full-Stack Developer</p>
+              <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed mb-6 sm:mb-8 mx-auto md:mx-0">
                 Fast, clean, and built to scale. From GPT-4 powered SaaS platforms to autonomous AI agents — I turn your AI ideas into production-ready products.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white px-7 py-3.5 rounded-full font-semibold transition-all hover:scale-105 shadow-lg shadow-brand-600/25">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center md:justify-start">
+                <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white px-5 sm:px-7 py-3 sm:py-3.5 rounded-full font-semibold transition-all hover:scale-105 shadow-lg shadow-brand-600/25 text-sm sm:text-base">
                   <ExternalLink className="w-4 h-4" /> Hire Me on Upwork
                 </a>
-                <a href="#results" className="inline-flex items-center gap-2 border border-slate-700 hover:border-brand-500/50 text-slate-300 hover:text-white px-7 py-3.5 rounded-full font-semibold transition-all">
+                <a href="#results" className="inline-flex items-center justify-center gap-2 border border-slate-700 hover:border-brand-500/50 text-slate-300 hover:text-white px-5 sm:px-7 py-3 sm:py-3.5 rounded-full font-semibold transition-all text-sm sm:text-base">
                   See My Results <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
             </div>
             {/* Profile Photo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 order-1 md:order-2">
               <div className="relative">
-                <div className="w-56 h-68 md:w-64 md:h-80 rounded-3xl bg-gradient-to-br from-brand-600 via-cyan-500 to-emerald-500 p-[3px] animate-float">
-                  <div className="w-full h-full rounded-3xl overflow-hidden bg-slate-950">
+                <div className="w-44 h-56 sm:w-56 sm:h-68 md:w-64 md:h-80 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-brand-600 via-cyan-500 to-emerald-500 p-[3px] animate-float">
+                  <div className="w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950">
                     <img
                       src={PROFILE_IMG}
                       alt={NAME}
@@ -865,81 +865,81 @@ export default function App() {
                     />
                   </div>
                 </div>
-                <div className="absolute -top-3 -right-3 bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-sm rounded-xl px-3 py-1.5 text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Available Now
+                <div className="absolute -top-2 sm:-top-3 -right-2 sm:-right-3 bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-sm rounded-lg sm:rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold text-emerald-400 flex items-center gap-1 sm:gap-1.5">
+                  <CheckCircle2 className="w-3 sm:w-3.5 h-3 sm:h-3.5" /> Available Now
                 </div>
-                <div className="absolute -bottom-3 -left-3 bg-amber-500/20 border border-amber-500/40 backdrop-blur-sm rounded-xl px-3 py-1.5 text-xs font-semibold text-amber-400 flex items-center gap-1.5">
-                  <Star className="w-3.5 h-3.5 fill-amber-400" /> 5.0 Rating
+                <div className="absolute -bottom-2 sm:-bottom-3 -left-2 sm:-left-3 bg-amber-500/20 border border-amber-500/40 backdrop-blur-sm rounded-lg sm:rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold text-amber-400 flex items-center gap-1 sm:gap-1.5">
+                  <Star className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-amber-400" /> 5.0 Rating
                 </div>
               </div>
             </div>
           </div>
           {/* Stats */}
-          <div className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="mt-12 sm:mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[
-              { val: '5+', label: 'Years Experience', icon: <Clock className="w-5 h-5 text-brand-400" /> },
-              { val: '200+', label: 'Projects Delivered', icon: <Award className="w-5 h-5 text-cyan-400" /> },
-              { val: '30+', label: 'Countries Served', icon: <Globe className="w-5 h-5 text-emerald-400" /> },
-              { val: '100%', label: 'Job Success', icon: <Shield className="w-5 h-5 text-amber-400" /> },
+              { val: '5+', label: 'Years Experience', icon: <Clock className="w-4 sm:w-5 h-4 sm:h-5 text-brand-400" /> },
+              { val: '200+', label: 'Projects Delivered', icon: <Award className="w-4 sm:w-5 h-4 sm:h-5 text-cyan-400" /> },
+              { val: '30+', label: 'Countries Served', icon: <Globe className="w-4 sm:w-5 h-4 sm:h-5 text-emerald-400" /> },
+              { val: '100%', label: 'Job Success', icon: <Shield className="w-4 sm:w-5 h-4 sm:h-5 text-amber-400" /> },
             ].map((s, i) => (
-              <div key={i} className="stat-card rounded-2xl p-5 text-center card-hover">
-                <div className="flex justify-center mb-3">{s.icon}</div>
+              <div key={i} className="stat-card rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center card-hover">
+                <div className="flex justify-center mb-2 sm:mb-3">{s.icon}</div>
                 <AnimatedStat value={s.val} />
-                <p className="text-slate-400 text-sm mt-2 font-medium">{s.label}</p>
+                <p className="text-slate-400 text-xs sm:text-sm mt-1 sm:mt-2 font-medium">{s.label}</p>
               </div>
             ))}
           </div>
         </header>
 
         {/* ═══════════════ WHAT I BUILD ═══════════════ */}
-        <Section id="services" className="px-6 py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-brand-400 text-sm font-bold tracking-widest uppercase">Services</span>
-            <h2 className="text-3xl md:text-5xl font-black mt-3 mb-4">What I Build</h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">End-to-end AI solutions — from concept to production. Every project is built for performance, scalability, and real business impact.</p>
+        <Section id="services" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10 md:mb-14">
+            <span className="text-brand-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Services</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">What I Build</h2>
+            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">End-to-end AI solutions — from concept to production. Every project is built for performance, scalability, and real business impact.</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {services.map((s, i) => (
-              <div key={i} className={`group relative bg-slate-900/60 backdrop-blur border ${s.border} rounded-2xl p-6 card-hover hover:shadow-xl ${s.glow}`}>
-                <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${s.color} mb-5`}>{s.icon}</div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-white transition-colors">{s.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{s.desc}</p>
-                <ChevronRight className="absolute top-6 right-6 w-5 h-5 text-slate-700 group-hover:text-brand-400 transition-colors" />
+              <div key={i} className={`group relative bg-slate-900/60 backdrop-blur border ${s.border} rounded-xl sm:rounded-2xl p-4 sm:p-6 card-hover hover:shadow-xl ${s.glow}`}>
+                <div className={`inline-flex items-center justify-center w-10 sm:w-12 md:w-14 h-10 sm:h-12 md:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br ${s.color} mb-3 sm:mb-5 [&>svg]:w-5 [&>svg]:sm:w-6 [&>svg]:md:w-7 [&>svg]:h-5 [&>svg]:sm:h-6 [&>svg]:md:h-7`}>{s.icon}</div>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1 sm:mb-2 group-hover:text-white transition-colors pr-6">{s.title}</h3>
+                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{s.desc}</p>
+                <ChevronRight className="absolute top-4 sm:top-6 right-4 sm:right-6 w-4 sm:w-5 h-4 sm:h-5 text-slate-700 group-hover:text-brand-400 transition-colors" />
               </div>
             ))}
           </div>
         </Section>
 
         {/* ═══════════════ RESULTS ═══════════════ */}
-        <Section id="results" className="px-6 py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-emerald-400 text-sm font-bold tracking-widest uppercase">Proven Impact</span>
-            <h2 className="text-3xl md:text-5xl font-black mt-3 mb-4">Recent Results</h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">Numbers don't lie. Here's the real-world impact my AI solutions have delivered for clients.</p>
+        <Section id="results" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10 md:mb-14">
+            <span className="text-emerald-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Proven Impact</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">Recent Results</h2>
+            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">Numbers don't lie. Here's the real-world impact my AI solutions have delivered for clients.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
             {results.map((r, i) => (
-              <div key={i} className="group relative overflow-hidden bg-slate-900/60 backdrop-blur border border-slate-800 rounded-2xl p-7 card-hover">
+              <div key={i} className="group relative overflow-hidden bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-7 card-hover">
                 <div className={`absolute inset-0 bg-gradient-to-br ${
                   r.color === 'cyan' ? 'from-cyan-500/5 to-transparent' :
                   r.color === 'brand' ? 'from-brand-500/5 to-transparent' :
                   r.color === 'emerald' ? 'from-emerald-500/5 to-transparent' :
                   'from-rose-500/5 to-transparent'
                 } opacity-0 group-hover:opacity-100 transition-opacity`} />
-                <div className="relative flex items-start gap-5">
-                  <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-slate-800/80 flex items-center justify-center">{r.icon}</div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-slate-200 mb-1">{r.title}</h3>
-                    <div className="flex items-baseline gap-2 mb-1">
-                      <span className={`text-3xl font-black ${
+                <div className="relative flex items-start gap-3 sm:gap-4 md:gap-5">
+                  <div className="flex-shrink-0 w-10 sm:w-12 md:w-14 h-10 sm:h-12 md:h-14 rounded-lg sm:rounded-xl bg-slate-800/80 flex items-center justify-center [&>svg]:w-5 [&>svg]:sm:w-6 [&>svg]:md:w-8 [&>svg]:h-5 [&>svg]:sm:h-6 [&>svg]:md:h-8">{r.icon}</div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-200 mb-1">{r.title}</h3>
+                    <div className="flex flex-wrap items-baseline gap-1 sm:gap-2 mb-1">
+                      <span className={`text-xl sm:text-2xl md:text-3xl font-black ${
                         r.color === 'cyan' ? 'text-cyan-400' :
                         r.color === 'brand' ? 'text-brand-400' :
                         r.color === 'emerald' ? 'text-emerald-400' :
                         'text-rose-400'
                       }`}>{r.metric}</span>
-                      <span className="text-slate-400 text-sm font-semibold">{r.metricLabel}</span>
+                      <span className="text-slate-400 text-xs sm:text-sm font-semibold">{r.metricLabel}</span>
                     </div>
-                    <p className="text-slate-500 text-sm">{r.detail}</p>
+                    <p className="text-slate-500 text-xs sm:text-sm">{r.detail}</p>
                   </div>
                 </div>
               </div>
@@ -948,49 +948,49 @@ export default function App() {
         </Section>
 
         {/* ═══════════════ FEATURED CREATION ═══════════════ */}
-        <Section id="featured" className="px-6 py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-rose-400 text-sm font-bold tracking-widest uppercase">Featured Creation</span>
-            <h2 className="text-3xl md:text-5xl font-black mt-3 mb-4">ActLikeYouKnow Platform</h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-6">A full-stack AI-powered SaaS platform — designed, built, and deployed from scratch.</p>
+        <Section id="featured" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
+            <span className="text-rose-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Featured Creation</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">ActLikeYouKnow Platform</h2>
+            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-4 sm:mb-6 px-2">A full-stack AI-powered SaaS platform — designed, built, and deployed from scratch.</p>
             <a
               href={PLATFORM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 rounded-full px-6 py-2.5 text-rose-400 hover:text-rose-300 text-sm font-semibold transition-all hover:bg-rose-500/20"
+              className="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 rounded-full px-4 sm:px-6 py-2 sm:py-2.5 text-rose-400 hover:text-rose-300 text-xs sm:text-sm font-semibold transition-all hover:bg-rose-500/20"
             >
-              <ExternalLink className="w-4 h-4" /> Visit Live Platform
+              <ExternalLink className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Visit Live Platform
             </a>
           </div>
 
           {/* Tabs */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex bg-slate-900/80 border border-slate-700/50 rounded-xl p-1.5">
+          <div className="flex justify-center mb-6 sm:mb-8">
+            <div className="inline-flex bg-slate-900/80 border border-slate-700/50 rounded-lg sm:rounded-xl p-1 sm:p-1.5">
               <button
                 onClick={() => setActiveTab('user')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                   activeTab === 'user'
                     ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <Monitor className="w-4 h-4" /> User Dashboard
+                <Monitor className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> User
               </button>
               <button
                 onClick={() => setActiveTab('admin')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                   activeTab === 'admin'
                     ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/30'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <ShieldCheck className="w-4 h-4" /> Admin Dashboard
+                <ShieldCheck className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Admin
               </button>
             </div>
           </div>
 
           {/* Gallery */}
-          <div className="bg-slate-900/40 backdrop-blur border border-slate-700/30 rounded-2xl p-6 md:p-8">
+          <div className="bg-slate-900/40 backdrop-blur border border-slate-700/30 rounded-xl sm:rounded-2xl p-3 sm:p-6 md:p-8">
             {activeTab === 'user' ? (
               <ScreenshotGallery images={USER_DASHBOARD_IMGS} label="User Dashboard" />
             ) : (
@@ -999,34 +999,34 @@ export default function App() {
           </div>
 
           {/* Platform features */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-6 sm:mt-8">
             {[
               { icon: '🤖', label: 'AI-Powered' },
               { icon: '💳', label: 'Stripe Billing' },
               { icon: '📊', label: 'Analytics Dashboard' },
               { icon: '🔐', label: 'Auth & Roles' },
             ].map((f, i) => (
-              <div key={i} className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 text-center card-hover">
-                <div className="text-2xl mb-2">{f.icon}</div>
-                <div className="text-sm font-semibold text-slate-300">{f.label}</div>
+              <div key={i} className="bg-slate-900/60 border border-slate-800 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center card-hover">
+                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">{f.icon}</div>
+                <div className="text-xs sm:text-sm font-semibold text-slate-300">{f.label}</div>
               </div>
             ))}
           </div>
         </Section>
 
         {/* ═══════════════ TECH STACK ═══════════════ */}
-        <Section className="px-6 py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-cyan-400 text-sm font-bold tracking-widest uppercase">Tech Stack</span>
-            <h2 className="text-3xl md:text-5xl font-black mt-3 mb-4">Tools & Technologies</h2>
+        <Section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10 md:mb-14">
+            <span className="text-cyan-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Tech Stack</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">Tools & Technologies</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
             {techStack.map((group, i) => (
-              <div key={i} className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-2xl p-6 card-hover">
-                <h3 className="text-sm font-bold text-brand-400 uppercase tracking-wider mb-4">{group.category}</h3>
-                <div className="flex flex-wrap gap-2">
+              <div key={i} className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 card-hover">
+                <h3 className="text-xs sm:text-sm font-bold text-brand-400 uppercase tracking-wider mb-3 sm:mb-4">{group.category}</h3>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {group.items.map((item, j) => (
-                    <span key={j} className="text-xs font-medium bg-slate-800/80 text-slate-300 border border-slate-700/50 px-3 py-1.5 rounded-lg">{item}</span>
+                    <span key={j} className="text-[10px] sm:text-xs font-medium bg-slate-800/80 text-slate-300 border border-slate-700/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg">{item}</span>
                   ))}
                 </div>
               </div>
@@ -1035,89 +1035,89 @@ export default function App() {
         </Section>
 
         {/* ═══════════════ HOW I WORK ═══════════════ */}
-        <Section className="px-6 py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-amber-400 text-sm font-bold tracking-widest uppercase">Process</span>
-            <h2 className="text-3xl md:text-5xl font-black mt-3 mb-4">How I Work</h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">A streamlined, transparent process designed to move fast and deliver results — all async, no calls needed.</p>
+        <Section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10 md:mb-14">
+            <span className="text-amber-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Process</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">How I Work</h2>
+            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">A streamlined, transparent process designed to move fast and deliver results — all async, no calls needed.</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
             {processSteps.map((step, i) => (
               <div key={i} className="relative group">
-                <div className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-2xl p-6 card-hover h-full">
-                  <div className="text-5xl font-black text-slate-800 group-hover:text-brand-900 transition-colors mb-4">{step.num}</div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="text-brand-400">{step.icon}</div>
-                    <h3 className="font-bold text-lg">{step.title}</h3>
+                <div className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 card-hover h-full">
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 group-hover:text-brand-900 transition-colors mb-2 sm:mb-4">{step.num}</div>
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+                    <div className="text-brand-400 [&>svg]:w-4 [&>svg]:sm:w-5 [&>svg]:md:w-6 [&>svg]:h-4 [&>svg]:sm:h-5 [&>svg]:md:h-6">{step.icon}</div>
+                    <h3 className="font-bold text-sm sm:text-base md:text-lg">{step.title}</h3>
                   </div>
-                  <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
+                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{step.desc}</p>
                 </div>
-                {i < 3 && <ArrowRight className="hidden md:block absolute top-1/2 -right-4 w-5 h-5 text-slate-700 -translate-y-1/2 z-10" />}
+                {i < 3 && <ArrowRight className="hidden md:block absolute top-1/2 -right-3 md:-right-4 w-4 md:w-5 h-4 md:h-5 text-slate-700 -translate-y-1/2 z-10" />}
               </div>
             ))}
           </div>
         </Section>
 
         {/* ═══════════════ WHY ME ═══════════════ */}
-        <Section className="px-6 py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-rose-400 text-sm font-bold tracking-widest uppercase">Why Choose Me</span>
-            <h2 className="text-3xl md:text-5xl font-black mt-3 mb-4">The Difference</h2>
+        <Section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10 md:mb-14">
+            <span className="text-rose-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Why Choose Me</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">The Difference</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
             {[
-              { icon: <Zap className="w-7 h-7 text-amber-400" />, title: 'Ship Fast', desc: 'I move at startup speed. Most MVPs are ready in 2–4 weeks. You get weekly demos and constant communication.' },
-              { icon: <Shield className="w-7 h-7 text-emerald-400" />, title: 'Production-Grade', desc: 'No throwaway code. Everything is built with clean architecture, proper error handling, testing, and documentation.' },
-              { icon: <TrendingUp className="w-7 h-7 text-brand-400" />, title: 'Business-First Thinking', desc: "I don't just write code — I understand your business goals and engineer solutions that drive measurable ROI." },
+              { icon: <Zap className="w-5 sm:w-6 md:w-7 h-5 sm:h-6 md:h-7 text-amber-400" />, title: 'Ship Fast', desc: 'I move at startup speed. Most MVPs are ready in 2–4 weeks. You get weekly demos and constant communication.' },
+              { icon: <Shield className="w-5 sm:w-6 md:w-7 h-5 sm:h-6 md:h-7 text-emerald-400" />, title: 'Production-Grade', desc: 'No throwaway code. Everything is built with clean architecture, proper error handling, testing, and documentation.' },
+              { icon: <TrendingUp className="w-5 sm:w-6 md:w-7 h-5 sm:h-6 md:h-7 text-brand-400" />, title: 'Business-First Thinking', desc: "I don't just write code — I understand your business goals and engineer solutions that drive measurable ROI." },
             ].map((item, i) => (
-              <div key={i} className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-2xl p-7 card-hover text-center">
-                <div className="w-16 h-16 rounded-2xl bg-slate-800/80 flex items-center justify-center mx-auto mb-5">{item.icon}</div>
-                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+              <div key={i} className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 card-hover text-center">
+                <div className="w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 rounded-xl sm:rounded-2xl bg-slate-800/80 flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5">{item.icon}</div>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3">{item.title}</h3>
+                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </Section>
 
         {/* ═══════════════ TESTIMONIAL ═══════════════ */}
-        <Section className="px-6 py-16 max-w-6xl mx-auto">
-          <div className="relative overflow-hidden bg-gradient-to-r from-brand-950 via-slate-900 to-brand-950 border border-brand-500/20 rounded-3xl p-8 md:p-12">
-            <div className="absolute top-0 right-0 w-72 h-72 bg-brand-500/5 rounded-full blur-3xl" />
+        <Section className="px-4 sm:px-6 py-10 sm:py-12 md:py-16 max-w-6xl mx-auto">
+          <div className="relative overflow-hidden bg-gradient-to-r from-brand-950 via-slate-900 to-brand-950 border border-brand-500/20 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12">
+            <div className="absolute top-0 right-0 w-48 sm:w-72 h-48 sm:h-72 bg-brand-500/5 rounded-full blur-3xl" />
             <div className="relative text-center max-w-3xl mx-auto">
-              <div className="flex justify-center gap-1 mb-5">
-                {[...Array(5)].map((_, i) => <Star key={i} className="w-6 h-6 text-amber-400 fill-amber-400" />)}
+              <div className="flex justify-center gap-0.5 sm:gap-1 mb-3 sm:mb-5">
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6 text-amber-400 fill-amber-400" />)}
               </div>
-              <blockquote className="text-xl md:text-2xl font-medium text-slate-200 leading-relaxed mb-6 italic">
+              <blockquote className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-slate-200 leading-relaxed mb-4 sm:mb-6 italic px-2">
                 "Exceptional AI developer. Delivered a complex GPT-4 integrated platform ahead of schedule with impeccable code quality. Already planning our next project together."
               </blockquote>
-              <div className="text-slate-400 text-sm font-semibold">— Startup Founder, USA</div>
+              <div className="text-slate-400 text-xs sm:text-sm font-semibold">— Startup Founder, USA</div>
             </div>
           </div>
         </Section>
 
         {/* ═══════════════ CTA ═══════════════ */}
-        <Section id="contact" className="px-6 py-20 max-w-6xl mx-auto">
-          <div className="relative overflow-hidden bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 rounded-3xl p-10 md:p-16 text-center">
+        <Section id="contact" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
+          <div className="relative overflow-hidden bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-16 text-center">
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
             <div className="relative">
-              <Sparkles className="w-10 h-10 text-brand-200 mx-auto mb-5" />
-              <h2 className="text-3xl md:text-5xl font-black mb-4">Ready to Build Something Amazing?</h2>
-              <p className="text-brand-200 text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+              <Sparkles className="w-8 sm:w-10 h-8 sm:h-10 text-brand-200 mx-auto mb-4 sm:mb-5" />
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-3 sm:mb-4">Ready to Build Something Amazing?</h2>
+              <p className="text-brand-200 text-sm sm:text-base md:text-lg max-w-xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2">
                 Send me your project brief on Upwork. I typically respond within 2 hours and can start within the week.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-brand-700 hover:text-brand-800 px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:scale-105 transition-all">
-                  <ExternalLink className="w-5 h-5" /> Hire Me on Upwork
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+                <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-brand-700 hover:text-brand-800 px-5 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base md:text-lg shadow-xl hover:scale-105 transition-all">
+                  <ExternalLink className="w-4 sm:w-5 h-4 sm:h-5" /> Hire Me on Upwork
                 </a>
               </div>
-              <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2.5">
-                <Globe className="w-4 h-4 text-brand-200" />
-                <span className="text-brand-100 text-sm font-medium">{UPWORK_URL}</span>
+              <div className="mt-4 sm:mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 sm:px-6 py-2 sm:py-2.5 max-w-full overflow-hidden">
+                <Globe className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-brand-200 flex-shrink-0" />
+                <span className="text-brand-100 text-[10px] sm:text-xs md:text-sm font-medium truncate">{UPWORK_URL}</span>
               </div>
-              <div className="mt-8 flex flex-wrap gap-6 justify-center text-brand-200/80 text-sm">
-                <span className="flex items-center gap-2"><Mail className="w-4 h-4" /> Quick Response</span>
-                <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> Flexible Hours</span>
-                <span className="flex items-center gap-2"><MapPin className="w-4 h-4" /> Remote Worldwide</span>
+              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 justify-center text-brand-200/80 text-xs sm:text-sm">
+                <span className="flex items-center justify-center gap-2"><Mail className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Quick Response</span>
+                <span className="flex items-center justify-center gap-2"><Clock className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Flexible Hours</span>
+                <span className="flex items-center justify-center gap-2"><MapPin className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Remote Worldwide</span>
               </div>
             </div>
           </div>
@@ -1126,10 +1126,10 @@ export default function App() {
 
 
         {/* ═══════════════ FOOTER ═══════════════ */}
-        <footer className="px-6 py-10 max-w-6xl mx-auto text-center border-t border-slate-800/50">
-          <div className="flex items-center justify-center gap-2 text-slate-500 text-sm">
+        <footer className="px-4 sm:px-6 py-8 sm:py-10 max-w-6xl mx-auto text-center border-t border-slate-800/50">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-slate-500 text-xs sm:text-sm">
             <BrainCircuit className="w-4 h-4 text-brand-500" />
-            <span>{NAME} · AI Developer Portfolio · Built with passion for intelligent software</span>
+            <span>ACLLC. · AI Developer Portfolio · Built with passion for intelligent software</span>
           </div>
         </footer>
       </div>
