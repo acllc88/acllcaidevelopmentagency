@@ -1,66 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
 
-    <!-- BG gradient: deep dark navy -->
+    <!-- Background gradient -->
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%"   stop-color="#04040f"/>
-      <stop offset="55%"  stop-color="#090920"/>
-      <stop offset="100%" stop-color="#06051a"/>
+      <stop offset="50%"  stop-color="#080818"/>
+      <stop offset="100%" stop-color="#05050f"/>
     </linearGradient>
 
-    <!-- Headline gradient -->
+    <!-- Headline gradient blue→purple→pink -->
     <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%"   stop-color="#60a5fa"/>
       <stop offset="50%"  stop-color="#a78bfa"/>
       <stop offset="100%" stop-color="#f0abfc"/>
     </linearGradient>
 
-    <!-- Green gradient for badge -->
-    <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#34d399"/>
-      <stop offset="100%" stop-color="#22d3ee"/>
-    </linearGradient>
-
-    <!-- Top/bottom border line -->
+    <!-- Top/bottom border gradient -->
     <linearGradient id="ln" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%"   stop-color="#3b82f6" stop-opacity="0"/>
-      <stop offset="25%"  stop-color="#3b82f6"/>
+      <stop offset="20%"  stop-color="#3b82f6"/>
       <stop offset="50%"  stop-color="#a78bfa"/>
-      <stop offset="75%"  stop-color="#06b6d4"/>
+      <stop offset="80%"  stop-color="#06b6d4"/>
       <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
-    </linearGradient>
-
-    <!-- Card fills -->
-    <linearGradient id="c1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#0f2040"/>
-      <stop offset="100%" stop-color="#070e20"/>
-    </linearGradient>
-    <linearGradient id="c2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#1a0d3d"/>
-      <stop offset="100%" stop-color="#0c0620"/>
-    </linearGradient>
-    <linearGradient id="c3" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#062030"/>
-      <stop offset="100%" stop-color="#030d18"/>
-    </linearGradient>
-
-    <!-- Card top bar gradients -->
-    <linearGradient id="b1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.3"/>
-    </linearGradient>
-    <linearGradient id="b2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.3"/>
-    </linearGradient>
-    <linearGradient id="b3" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.3"/>
     </linearGradient>
 
     <!-- Ambient glow radials -->
     <radialGradient id="gl1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#3b82f6" stop-opacity="0.22"/>
+      <stop offset="0%"   stop-color="#3b82f6" stop-opacity="0.20"/>
       <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="gl2" cx="50%" cy="50%" r="50%">
@@ -68,35 +34,25 @@
       <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="gl3" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#06b6d4" stop-opacity="0.14"/>
+      <stop offset="0%"   stop-color="#06b6d4" stop-opacity="0.13"/>
       <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Grid pattern -->
-    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-      <path d="M50 0 L0 0 0 50" fill="none" stroke="rgba(255,255,255,0.028)" stroke-width="0.6"/>
+    <!-- Subtle grid -->
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 L0 0 0 60" fill="none" stroke="rgba(255,255,255,0.025)" stroke-width="0.7"/>
     </pattern>
 
-    <!-- Dot pattern -->
-    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
-      <circle cx="10" cy="10" r="0.7" fill="rgba(255,255,255,0.045)"/>
-    </pattern>
-
-    <!-- Card drop shadow -->
-    <filter id="cs" x="-8%" y="-8%" width="116%" height="116%">
-      <feDropShadow dx="0" dy="6" stdDeviation="18" flood-color="#000" flood-opacity="0.7"/>
+    <!-- Text glow filter -->
+    <filter id="tg" x="-10%" y="-40%" width="120%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
-    <!-- Text glow -->
-    <filter id="tg" x="-20%" y="-60%" width="140%" height="220%">
-      <feGaussianBlur stdDeviation="6" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-
-    <!-- Badge glow -->
-    <filter id="bg2" x="-20%" y="-60%" width="140%" height="220%">
-      <feGaussianBlur stdDeviation="3" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    <!-- Soft glow filter -->
+    <filter id="sg" x="-20%" y="-60%" width="140%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
     <!-- Clip to canvas -->
@@ -108,259 +64,187 @@
 
   <g clip-path="url(#canvas)">
 
-    <!-- ══════════════════════════════════════════
+    <!-- ═══════════════════════════════════════
          BACKGROUND
-    ══════════════════════════════════════════ -->
+    ═══════════════════════════════════════ -->
     <rect width="1200" height="630" fill="url(#bg)"/>
     <rect width="1200" height="630" fill="url(#grid)"/>
-    <rect width="1200" height="630" fill="url(#dots)"/>
 
-    <!-- Ambient light orbs -->
-    <ellipse cx="180"  cy="120"  rx="380" ry="280" fill="url(#gl1)" opacity="0.9"/>
-    <ellipse cx="1060" cy="520"  rx="340" ry="260" fill="url(#gl2)" opacity="0.9"/>
-    <ellipse cx="600"  cy="600"  rx="420" ry="180" fill="url(#gl3)" opacity="0.6"/>
-    <ellipse cx="950"  cy="120"  rx="220" ry="160" fill="url(#gl2)" opacity="0.4"/>
+    <!-- Ambient glow orbs -->
+    <ellipse cx="160"  cy="180"  rx="440" ry="320" fill="url(#gl1)" opacity="0.85"/>
+    <ellipse cx="1080" cy="460"  rx="380" ry="300" fill="url(#gl2)" opacity="0.85"/>
+    <ellipse cx="600"  cy="630"  rx="500" ry="200" fill="url(#gl3)" opacity="0.55"/>
 
-    <!-- Top accent line (4px) -->
-    <rect x="0" y="0"   width="1200" height="4" fill="url(#ln)"/>
-    <!-- Bottom accent line -->
-    <rect x="0" y="626" width="1200" height="4" fill="url(#ln)" opacity="0.7"/>
+    <!-- Top accent bar -->
+    <rect x="0" y="0" width="1200" height="5" fill="url(#ln)"/>
+    <!-- Bottom accent bar -->
+    <rect x="0" y="625" width="1200" height="5" fill="url(#ln)" opacity="0.6"/>
 
-    <!-- ══════════════════════════════════════════
-         CORNER BRACKETS
-    ══════════════════════════════════════════ -->
-    <!-- Top-left -->
-    <polyline points="56,18 56,58 96,58" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-opacity="0.55" stroke-linecap="round"/>
-    <!-- Top-right -->
-    <polyline points="1144,18 1144,58 1104,58" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-opacity="0.55" stroke-linecap="round"/>
-    <!-- Bottom-left -->
-    <polyline points="56,612 56,572 96,572" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-opacity="0.55" stroke-linecap="round"/>
-    <!-- Bottom-right -->
-    <polyline points="1144,612 1144,572 1104,572" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-opacity="0.55" stroke-linecap="round"/>
+    <!-- Corner brackets -->
+    <polyline points="52,16 52,60 96,60"    fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-opacity="0.5" stroke-linecap="round"/>
+    <polyline points="1148,16 1148,60 1104,60" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-opacity="0.5" stroke-linecap="round"/>
+    <polyline points="52,614 52,570 96,570"   fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-opacity="0.5" stroke-linecap="round"/>
+    <polyline points="1148,614 1148,570 1104,570" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-opacity="0.5" stroke-linecap="round"/>
 
-    <!-- ══════════════════════════════════════════
-         HEADER ROW  (y: 30–70)
-    ══════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════
+         HEADER  y: 28–70
+    ═══════════════════════════════════════ -->
 
-    <!-- Logo mark: 3 nodes -->
-    <circle cx="76"  cy="50" r="7"   fill="#3b82f6" filter="url(#bg2)"/>
-    <circle cx="95"  cy="38" r="5"   fill="#8b5cf6" filter="url(#bg2)"/>
-    <circle cx="95"  cy="62" r="5"   fill="#06b6d4" filter="url(#bg2)"/>
-    <line x1="83"  y1="47" x2="90"  y2="41" stroke="#60a5fa"  stroke-width="1.5" stroke-opacity="0.7"/>
-    <line x1="83"  y1="53" x2="90"  y2="59" stroke="#a78bfa"  stroke-width="1.5" stroke-opacity="0.7"/>
-    <line x1="95"  y1="43" x2="95"  y2="57" stroke="#22d3ee"  stroke-width="1"   stroke-opacity="0.5"/>
+    <!-- Logo nodes -->
+    <circle cx="72"  cy="46" r="7"  fill="#3b82f6" filter="url(#sg)"/>
+    <circle cx="90"  cy="34" r="4.5" fill="#8b5cf6" filter="url(#sg)"/>
+    <circle cx="90"  cy="58" r="4.5" fill="#06b6d4" filter="url(#sg)"/>
+    <line x1="79" y1="43" x2="86" y2="37" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.7"/>
+    <line x1="79" y1="49" x2="86" y2="55" stroke="#a78bfa" stroke-width="1.5" stroke-opacity="0.7"/>
+    <line x1="90" y1="39" x2="90" y2="53" stroke="#22d3ee" stroke-width="1"   stroke-opacity="0.5"/>
 
-    <!-- Brand name -->
-    <text x="112" y="58" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="24" font-weight="900" fill="white" letter-spacing="6">ACLLC</text>
+    <!-- Brand -->
+    <text x="106" y="55" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="22" font-weight="900" fill="white" letter-spacing="6">ACLLC</text>
 
-    <!-- Separator dot -->
-    <circle cx="230" cy="50" r="2.5" fill="#334155"/>
+    <!-- Dot separator -->
+    <circle cx="218" cy="46" r="2.2" fill="#334155"/>
 
-    <!-- Tagline -->
-    <text x="244" y="56" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="500" fill="#64748b" letter-spacing="0.5">AI Product Engineer</text>
+    <!-- Sub-brand -->
+    <text x="230" y="51" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11.5" font-weight="500" fill="#64748b" letter-spacing="0.5">AI Product Engineer</text>
 
-    <!-- Available badge (right-aligned, ends at x=1148) -->
-    <!-- Badge bg -->
-    <rect x="882" y="32" width="262" height="36" rx="18" fill="rgba(34,197,94,0.08)" stroke="#22c55e" stroke-width="1.2" stroke-opacity="0.45"/>
-    <!-- Pulse dot -->
-    <circle cx="904" cy="50" r="6" fill="#22c55e" opacity="0.25">
-      <animate attributeName="r" values="6;12;6" dur="2.2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.25;0;0.25" dur="2.2s" repeatCount="indefinite"/>
+    <!-- Available badge -->
+    <rect x="880" y="28" width="268" height="38" rx="19" fill="rgba(34,197,94,0.07)" stroke="#22c55e" stroke-width="1.2" stroke-opacity="0.4"/>
+    <circle cx="904" cy="47" r="6"  fill="#22c55e" opacity="0.2">
+      <animate attributeName="r"       values="6;13;6"   dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0;0.2" dur="2.4s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="904" cy="50" r="6" fill="#22c55e"/>
-    <text x="919" y="55" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11.5" font-weight="700" fill="#34d399" letter-spacing="1.8">AVAILABLE FOR PROJECTS</text>
+    <circle cx="904" cy="47" r="5.5" fill="#22c55e"/>
+    <text x="920" y="52" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="700" fill="#34d399" letter-spacing="2">AVAILABLE FOR PROJECTS</text>
 
     <!-- Header divider -->
-    <line x1="56" y1="82" x2="1144" y2="82" stroke="white" stroke-opacity="0.07" stroke-width="1"/>
+    <line x1="52" y1="80" x2="1148" y2="80" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
 
-    <!-- ══════════════════════════════════════════
-         HERO TEXT  (y: 92–230)
-    ══════════════════════════════════════════ -->
 
-    <!-- Eyebrow label -->
-    <text x="56" y="118" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="700" fill="#3b82f6" letter-spacing="4.5">AI PRODUCT ENGINEER  ·  FROM CONCEPT TO DEPLOYED PRODUCT</text>
+    <!-- ═══════════════════════════════════════
+         MAIN HEADLINE  y: 115–300
+         "I build intelligent applications."
+         Large, centred, maximum impact
+    ═══════════════════════════════════════ -->
 
-    <!-- Main headline line 1 -->
-    <text x="56" y="186" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="70" font-weight="900" letter-spacing="-2" filter="url(#tg)">
-      <tspan fill="white">We Build </tspan><tspan fill="url(#hg)">Intelligence.</tspan>
+    <!-- Line 1 -->
+    <text x="600" y="180"
+      font-family="'Inter','Helvetica Neue',Arial,sans-serif"
+      font-size="82" font-weight="900" letter-spacing="-3"
+      text-anchor="middle" filter="url(#tg)">
+      <tspan fill="white">I build </tspan><tspan fill="url(#hg)">intelligent</tspan>
     </text>
 
-    <!-- Main headline line 2 -->
-    <text x="56" y="255" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="70" font-weight="900" fill="white" letter-spacing="-2">Not Automation.</text>
-
-    <!-- Gradient underline accent -->
-    <rect x="56" y="264" width="500" height="4" rx="2" fill="url(#hg)" opacity="0.7"/>
-
-    <!-- Sub-headline -->
-    <text x="56" y="300" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="16.5" font-weight="400" fill="#64748b" letter-spacing="0.3">
-      SaaS Dashboards  ·  Mobile AI Apps  ·  AI Agents  —  end-to-end, production-ready.
+    <!-- Line 2 -->
+    <text x="600" y="272"
+      font-family="'Inter','Helvetica Neue',Arial,sans-serif"
+      font-size="82" font-weight="900" letter-spacing="-3"
+      fill="white" text-anchor="middle">applications.
     </text>
 
-    <!-- ══════════════════════════════════════════
-         3 SERVICE CARDS  (y: 318 → 318+190=508)
-         Each card: width=354, gap=18
-         x: 56, 428, 800
-    ══════════════════════════════════════════ -->
+    <!-- Gradient underline -->
+    <rect x="300" y="285" width="600" height="4" rx="2" fill="url(#hg)" opacity="0.65"/>
 
-    <!-- ─── Card 1: SaaS Development (blue) ─── -->
-    <g transform="translate(56,318)" filter="url(#cs)">
-      <!-- Shadow base -->
-      <rect x="2" y="4" width="354" height="192" rx="16" fill="rgba(59,130,246,0.12)"/>
-      <!-- Card body -->
-      <rect x="0" y="0" width="354" height="192" rx="16" fill="url(#c1)"/>
-      <!-- Border -->
-      <rect x="0" y="0" width="354" height="192" rx="16" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.45"/>
-      <!-- Top accent bar -->
-      <rect x="0" y="0" width="354" height="4" rx="2" fill="url(#b1)"/>
-      <!-- Glow top-left corner -->
-      <circle cx="0" cy="0" r="80" fill="#3b82f6" opacity="0.05"/>
+    <!-- ═══════════════════════════════════════
+         SUBTITLE  y: 325
+    ═══════════════════════════════════════ -->
+    <text x="600" y="335"
+      font-family="'Inter','Helvetica Neue',Arial,sans-serif"
+      font-size="19" font-weight="400" fill="#94a3b8" letter-spacing="0.2"
+      text-anchor="middle">
+      SaaS platforms, Mobile AI apps &amp; AI Agents — built end-to-end.
+    </text>
+    <text x="600" y="364"
+      font-family="'Inter','Helvetica Neue',Arial,sans-serif"
+      font-size="19" font-weight="400" fill="#64748b" letter-spacing="0.2"
+      text-anchor="middle">
+      From concept to deployed product.
+    </text>
 
-      <!-- Icon box -->
-      <rect x="20" y="20" width="44" height="44" rx="10" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.5"/>
-      <text x="42" y="50" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="22" text-anchor="middle">⚡</text>
 
-      <!-- Title -->
-      <text x="76" y="38" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="17" font-weight="800" fill="white">SaaS Development</text>
-      <text x="76" y="56" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="10.5" font-weight="600" fill="#3b82f6" letter-spacing="2">FULL-STACK PLATFORM</text>
+    <!-- ═══════════════════════════════════════
+         3 SERVICE BADGES  y: 405–460
+    ═══════════════════════════════════════ -->
 
-      <!-- Divider -->
-      <line x1="20" y1="76" x2="334" y2="76" stroke="#3b82f6" stroke-opacity="0.18" stroke-width="1"/>
+    <!-- Badge 1 — SaaS Development (blue) — centred trio -->
+    <!-- x positions: left=152, mid=490, right=828  width=310 each, gap=26 -->
 
-      <!-- Features -->
-      <text x="20" y="100" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  Custom Dashboards &amp; Admin Panels</text>
-      <text x="20" y="120" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  Stripe Payments &amp; Subscriptions</text>
-      <text x="20" y="140" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  Firebase Backend + Vercel Deploy</text>
-      <text x="20" y="160" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  REST / GraphQL API Integration</text>
+    <!-- Card 1 -->
+    <rect x="152" y="405" width="290" height="62" rx="14"
+          fill="rgba(59,130,246,0.10)" stroke="#3b82f6" stroke-width="1.4" stroke-opacity="0.5"/>
+    <rect x="152" y="405" width="290" height="4" rx="2" fill="#3b82f6" opacity="0.7"/>
+    <text x="167" y="443" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="28" text-anchor="start">🏗️</text>
+    <text x="207" y="431" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="16" font-weight="800" fill="white">SaaS Development</text>
+    <text x="207" y="454" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="500" fill="#3b82f6" letter-spacing="1.5">DASHBOARDS · STRIPE · FIREBASE · VERCEL</text>
 
-      <!-- Price footer -->
-      <rect x="0" y="172" width="354" height="20" rx="0" fill="rgba(59,130,246,0.07)"/>
-      <rect x="0" y="172" width="354" height="20" rx="0" fill="none"/>
-      <rect x="0" y="168" width="354" height="1" fill="#3b82f6" fill-opacity="0.2"/>
-      <text x="20"  y="185" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="800" fill="#60a5fa">From $2,500</text>
-      <text x="210" y="185" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="500" fill="#475569">· 1–8 weeks delivery</text>
-    </g>
+    <!-- Card 2 -->
+    <rect x="460" y="405" width="280" height="62" rx="14"
+          fill="rgba(139,92,246,0.10)" stroke="#8b5cf6" stroke-width="1.4" stroke-opacity="0.5"/>
+    <rect x="460" y="405" width="280" height="4" rx="2" fill="#8b5cf6" opacity="0.7"/>
+    <text x="475" y="443" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="28" text-anchor="start">📱</text>
+    <text x="515" y="431" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="16" font-weight="800" fill="white">Mobile AI App</text>
+    <text x="515" y="454" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="500" fill="#a78bfa" letter-spacing="1.5">REACT NATIVE · ON-DEVICE AI · IOS &amp; ANDROID</text>
 
-    <!-- ─── Card 2: Mobile AI App (purple) ─── -->
-    <g transform="translate(428,318)" filter="url(#cs)">
-      <rect x="2" y="4" width="354" height="192" rx="16" fill="rgba(139,92,246,0.12)"/>
-      <rect x="0" y="0" width="354" height="192" rx="16" fill="url(#c2)"/>
-      <rect x="0" y="0" width="354" height="192" rx="16" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.45"/>
-      <rect x="0" y="0" width="354" height="4"   rx="2"  fill="url(#b2)"/>
-      <circle cx="354" cy="0" r="80" fill="#8b5cf6" opacity="0.05"/>
+    <!-- Card 3 -->
+    <rect x="758" y="405" width="290" height="62" rx="14"
+          fill="rgba(6,182,212,0.10)" stroke="#06b6d4" stroke-width="1.4" stroke-opacity="0.5"/>
+    <rect x="758" y="405" width="290" height="4" rx="2" fill="#06b6d4" opacity="0.7"/>
+    <text x="773" y="443" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="28" text-anchor="start">🤖</text>
+    <text x="813" y="431" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="16" font-weight="800" fill="white">AI Agent</text>
+    <text x="813" y="454" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="500" fill="#22d3ee" letter-spacing="1.5">LANGCHAIN · LANGGRAPH · OPENAI · ANTHROPIC</text>
 
-      <rect x="20" y="20" width="44" height="44" rx="10" fill="rgba(139,92,246,0.15)" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.5"/>
-      <text x="42" y="50" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="22" text-anchor="middle">📱</text>
 
-      <text x="76" y="38" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="17" font-weight="800" fill="white">Mobile AI App</text>
-      <text x="76" y="56" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="10.5" font-weight="600" fill="#8b5cf6" letter-spacing="2">REACT NATIVE + AI</text>
+    <!-- ═══════════════════════════════════════
+         TECH STACK PILLS  y: 497–526
+    ═══════════════════════════════════════ -->
 
-      <line x1="20" y1="76" x2="334" y2="76" stroke="#8b5cf6" stroke-opacity="0.18" stroke-width="1"/>
+    <!-- Divider -->
+    <line x1="52" y1="490" x2="1148" y2="490" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
 
-      <text x="20" y="100" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  React Native + Expo (iOS &amp; Android)</text>
-      <text x="20" y="120" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  On-Device AI + Voice &amp; Vision</text>
-      <text x="20" y="140" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  Firebase Auth + Push Notifications</text>
-      <text x="20" y="160" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  App Store &amp; Play Store Deployment</text>
+    <!-- "STACK" label -->
+    <text x="600" y="513" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="9" font-weight="700" fill="#334155" letter-spacing="4" text-anchor="middle">TECH STACK</text>
 
-      <rect x="0" y="168" width="354" height="1" fill="#8b5cf6" fill-opacity="0.2"/>
-      <rect x="0" y="172" width="354" height="20" fill="rgba(139,92,246,0.07)"/>
-      <text x="20"  y="185" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="800" fill="#a78bfa">From $3,000</text>
-      <text x="210" y="185" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="500" fill="#475569">· 2–8 weeks delivery</text>
-    </g>
+    <!-- Pills — 7 pills centred, each ~112px wide, 8px gap -->
+    <!-- Total: 7×112 + 6×10 = 784+60 = 844 → start x = (1200-844)/2 = 178 -->
 
-    <!-- ─── Card 3: AI Agent (cyan) ─── -->
-    <g transform="translate(800,318)" filter="url(#cs)">
-      <rect x="2" y="4" width="354" height="192" rx="16" fill="rgba(6,182,212,0.12)"/>
-      <rect x="0" y="0" width="354" height="192" rx="16" fill="url(#c3)"/>
-      <rect x="0" y="0" width="354" height="192" rx="16" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-opacity="0.45"/>
-      <rect x="0" y="0" width="354" height="4"   rx="2"  fill="url(#b3)"/>
-      <circle cx="177" cy="0" r="80" fill="#06b6d4" opacity="0.05"/>
-
-      <rect x="20" y="20" width="44" height="44" rx="10" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
-      <text x="42" y="50" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="22" text-anchor="middle">🤖</text>
-
-      <text x="76" y="38" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="17" font-weight="800" fill="white">AI Agent</text>
-      <text x="76" y="56" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="10.5" font-weight="600" fill="#06b6d4" letter-spacing="2">LANGGRAPH + LANGCHAIN</text>
-
-      <line x1="20" y1="76" x2="334" y2="76" stroke="#06b6d4" stroke-opacity="0.18" stroke-width="1"/>
-
-      <text x="20" y="100" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  Multi-Agent Reasoning Systems</text>
-      <text x="20" y="120" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  RAG Pipelines + Vector Databases</text>
-      <text x="20" y="140" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  OpenAI + Anthropic Powered</text>
-      <text x="20" y="160" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="500" fill="#94a3b8">→  80% Faster Research — Real Results</text>
-
-      <rect x="0" y="168" width="354" height="1" fill="#06b6d4" fill-opacity="0.2"/>
-      <rect x="0" y="172" width="354" height="20" fill="rgba(6,182,212,0.07)"/>
-      <text x="20"  y="185" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="800" fill="#22d3ee">From $1,500</text>
-      <text x="210" y="185" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="500" fill="#475569">· 1–6 weeks delivery</text>
-    </g>
-
-    <!-- ══════════════════════════════════════════
-         BOTTOM BAR  (y: 525–620)
-         Divider at y=524
-    ══════════════════════════════════════════ -->
-    <line x1="56" y1="524" x2="1144" y2="524" stroke="white" stroke-opacity="0.07" stroke-width="1"/>
-
-    <!-- ── Tech stack pills row (y: 535–560) ── -->
-    <!-- Row label -->
-    <text x="56" y="546" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="9" font-weight="700" fill="#334155" letter-spacing="3.5">STACK</text>
-
-    <!-- Pills start at x=106 -->
-    <!-- LangChain -->
-    <rect x="106"  y="532" width="90"  height="24" rx="5" fill="rgba(59,130,246,0.1)"  stroke="#3b82f6"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="151"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#60a5fa" text-anchor="middle">LangChain</text>
-    <!-- LangGraph -->
-    <rect x="204"  y="532" width="90"  height="24" rx="5" fill="rgba(59,130,246,0.1)"  stroke="#3b82f6"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="249"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#60a5fa" text-anchor="middle">LangGraph</text>
-    <!-- OpenAI -->
-    <rect x="302"  y="532" width="76"  height="24" rx="5" fill="rgba(167,139,250,0.1)" stroke="#8b5cf6"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="340"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#a78bfa" text-anchor="middle">OpenAI</text>
-    <!-- Anthropic -->
-    <rect x="386"  y="532" width="88"  height="24" rx="5" fill="rgba(167,139,250,0.1)" stroke="#8b5cf6"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="430"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#a78bfa" text-anchor="middle">Anthropic</text>
-    <!-- Next.js -->
-    <rect x="482"  y="532" width="70"  height="24" rx="5" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.18)" stroke-width="0.8"/>
-    <text x="517"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#e2e8f0" text-anchor="middle">Next.js</text>
     <!-- Firebase -->
-    <rect x="560"  y="532" width="78"  height="24" rx="5" fill="rgba(251,191,36,0.1)"  stroke="#fbbf24"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="599"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#fbbf24" text-anchor="middle">Firebase</text>
+    <rect x="178" y="522" width="104" height="26" rx="6" fill="rgba(251,191,36,0.10)" stroke="#fbbf24" stroke-width="0.9" stroke-opacity="0.45"/>
+    <text x="230" y="540" font-family="'JetBrains Mono','Courier New',monospace" font-size="11" font-weight="600" fill="#fbbf24" text-anchor="middle">Firebase</text>
+
     <!-- Stripe -->
-    <rect x="646"  y="532" width="64"  height="24" rx="5" fill="rgba(139,92,246,0.1)"  stroke="#8b5cf6"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="678"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#c084fc" text-anchor="middle">Stripe</text>
+    <rect x="292" y="522" width="96"  height="26" rx="6" fill="rgba(139,92,246,0.10)" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.45"/>
+    <text x="340" y="540" font-family="'JetBrains Mono','Courier New',monospace" font-size="11" font-weight="600" fill="#c084fc" text-anchor="middle">Stripe</text>
+
     <!-- Vercel -->
-    <rect x="718"  y="532" width="66"  height="24" rx="5" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.18)" stroke-width="0.8"/>
-    <text x="751"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#e2e8f0" text-anchor="middle">Vercel</text>
-    <!-- Vector DBs -->
-    <rect x="792"  y="532" width="90"  height="24" rx="5" fill="rgba(6,182,212,0.1)"   stroke="#06b6d4"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="837"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#22d3ee" text-anchor="middle">Vector DBs</text>
-    <!-- React Native -->
-    <rect x="890"  y="532" width="102" height="24" rx="5" fill="rgba(52,211,153,0.1)"  stroke="#34d399"  stroke-width="0.8" stroke-opacity="0.4"/>
-    <text x="941"  y="548" font-family="'JetBrains Mono','Courier New',monospace" font-size="10" font-weight="600" fill="#34d399" text-anchor="middle">React Native</text>
+    <rect x="398" y="522" width="94"  height="26" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.18)" stroke-width="0.9"/>
+    <text x="445" y="540" font-family="'JetBrains Mono','Courier New',monospace" font-size="11" font-weight="600" fill="#e2e8f0" text-anchor="middle">Vercel</text>
 
-    <!-- ── Stats + CTA row (y: 572–610) ── -->
+    <!-- LangChain -->
+    <rect x="502" y="522" width="104" height="26" rx="6" fill="rgba(59,130,246,0.10)" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.45"/>
+    <text x="554" y="540" font-family="'JetBrains Mono','Courier New',monospace" font-size="11" font-weight="600" fill="#60a5fa" text-anchor="middle">LangChain</text>
 
-    <!-- Stats left -->
-    <text x="56" y="592" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="500" fill="#475569">
-      <tspan fill="#34d399" font-weight="800" font-size="15">50+</tspan>
-      <tspan dx="4" fill="#475569"> sources analyzed</tspan>
-      <tspan dx="12" fill="#334155">·</tspan>
-      <tspan dx="12" fill="#34d399" font-weight="800" font-size="15">80%</tspan>
-      <tspan dx="4" fill="#475569"> faster research</tspan>
-      <tspan dx="12" fill="#334155">·</tspan>
-      <tspan dx="12" fill="#e2e8f0" font-weight="700"> 3 Core Services</tspan>
-      <tspan dx="12" fill="#334155">·</tspan>
-      <tspan dx="12" fill="#475569"> Production-Ready</tspan>
-    </text>
+    <!-- OpenAI -->
+    <rect x="616" y="522" width="88"  height="26" rx="6" fill="rgba(52,211,153,0.10)" stroke="#34d399" stroke-width="0.9" stroke-opacity="0.45"/>
+    <text x="660" y="540" font-family="'JetBrains Mono','Courier New',monospace" font-size="11" font-weight="600" fill="#34d399" text-anchor="middle">OpenAI</text>
 
-    <!-- CTA Button (WhatsApp) -->
-    <rect x="740" y="572" width="404" height="46" rx="12" fill="rgba(139,92,246,0.18)" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.6"/>
-    <!-- Inner glow -->
-    <rect x="741" y="573" width="402" height="44" rx="11" fill="url(#gl2)" opacity="0.3"/>
-    <!-- WhatsApp icon circle -->
-    <circle cx="768" cy="595" r="12" fill="rgba(34,197,94,0.2)" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5"/>
-    <text x="768" y="600" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="12" text-anchor="middle">💬</text>
-    <!-- CTA text -->
-    <text x="942" y="599" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="700" fill="white" text-anchor="middle">DM on WhatsApp  →  +212 638-426738</text>
+    <!-- Anthropic -->
+    <rect x="714" y="522" width="100" height="26" rx="6" fill="rgba(167,139,250,0.10)" stroke="#a78bfa" stroke-width="0.9" stroke-opacity="0.45"/>
+    <text x="764" y="540" font-family="'JetBrains Mono','Courier New',monospace" font-size="11" font-weight="600" fill="#a78bfa" text-anchor="middle">Anthropic</text>
+
+    <!-- Next.js -->
+    <rect x="824" y="522" width="88"  height="26" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.18)" stroke-width="0.9"/>
+    <text x="868" y="540" font-family="'JetBrains Mono','Courier New',monospace" font-size="11" font-weight="600" fill="#e2e8f0" text-anchor="middle">Next.js</text>
+
+
+    <!-- ═══════════════════════════════════════
+         BOTTOM CTA ROW  y: 570–610
+    ═══════════════════════════════════════ -->
+
+    <!-- WhatsApp CTA button centred -->
+    <rect x="350" y="565" width="500" height="46" rx="13"
+          fill="rgba(139,92,246,0.14)" stroke="#8b5cf6" stroke-width="1.4" stroke-opacity="0.55"/>
+    <circle cx="385" cy="588" r="12" fill="rgba(34,197,94,0.18)" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5"/>
+    <text x="385" y="593" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="13" text-anchor="middle">💬</text>
+    <text x="600" y="595" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-size="15" font-weight="700" fill="white" text-anchor="middle">DM on WhatsApp  →  +212 638-426738</text>
 
   </g>
-
 </svg>
