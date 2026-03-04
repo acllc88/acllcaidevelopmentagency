@@ -1,181 +1,303 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0a1a"/>
-      <stop offset="50%" style="stop-color:#0f0a2e"/>
-      <stop offset="100%" style="stop-color:#0a1628"/>
+    <!-- Background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#060611;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0d0d1f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0618;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="accent1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#6366f1"/>
-      <stop offset="50%" style="stop-color:#06b6d4"/>
-      <stop offset="100%" style="stop-color:#10b981"/>
+
+    <!-- Main headline gradient -->
+    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60a5fa" />
+      <stop offset="45%" style="stop-color:#a78bfa" />
+      <stop offset="100%" style="stop-color:#f0abfc" />
     </linearGradient>
-    <linearGradient id="accent2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#f59e0b"/>
-      <stop offset="100%" style="stop-color:#ef4444"/>
+
+    <!-- Green gradient -->
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#34d399" />
+      <stop offset="100%" style="stop-color:#22d3ee" />
     </linearGradient>
-    <linearGradient id="glow1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.3"/>
-      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0"/>
+
+    <!-- SaaS card gradient -->
+    <linearGradient id="saasGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a5f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f1f3d;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="glow2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.25"/>
-      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0"/>
+
+    <!-- Mobile card gradient -->
+    <linearGradient id="mobileGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b1f6b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a0f38;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="cta" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#6366f1"/>
-      <stop offset="100%" style="stop-color:#06b6d4"/>
+
+    <!-- Agent card gradient -->
+    <linearGradient id="agentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f3a3a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#061f1f;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="goldBadge" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#f59e0b"/>
-      <stop offset="100%" style="stop-color:#fbbf24"/>
+
+    <!-- Glow orbs -->
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.25" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0" />
+    </radialGradient>
+    <radialGradient id="glow3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0" />
+    </radialGradient>
+
+    <!-- Badge gradient -->
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:0.12" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:0.12" />
     </linearGradient>
-    <linearGradient id="photoRing" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1"/>
-      <stop offset="33%" style="stop-color:#06b6d4"/>
-      <stop offset="66%" style="stop-color:#10b981"/>
-      <stop offset="100%" style="stop-color:#f59e0b"/>
+
+    <!-- Top line gradient -->
+    <linearGradient id="topLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0" />
+      <stop offset="20%" style="stop-color:#3b82f6" />
+      <stop offset="50%" style="stop-color:#8b5cf6" />
+      <stop offset="80%" style="stop-color:#06b6d4" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0" />
     </linearGradient>
-    <filter id="softGlow">
-      <feGaussianBlur stdDeviation="20" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+
+    <!-- Card border gradients -->
+    <linearGradient id="saasBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0.2" />
+    </linearGradient>
+    <linearGradient id="mobileBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0.2" />
+    </linearGradient>
+    <linearGradient id="agentBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:0.2" />
+    </linearGradient>
+
+    <!-- Grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.025)" stroke-width="0.5"/>
+    </pattern>
+
+    <!-- Dot pattern -->
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.6" fill="rgba(255,255,255,0.05)"/>
+    </pattern>
+
+    <!-- Drop shadow for cards -->
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.5"/>
     </filter>
-    <filter id="textGlow">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+
+    <!-- Glow filter -->
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
     </filter>
-    <clipPath id="photoClip">
-      <circle cx="980" cy="200" r="88"/>
-    </clipPath>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  
-  <!-- Subtle grid -->
-  <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#ffffff" stroke-width="0.3" opacity="0.05"/>
-  </pattern>
-  <rect width="1200" height="630" fill="url(#grid)"/>
+  <!-- ═══ BACKGROUND ═══ -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.8"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
 
-  <!-- Glowing orbs -->
-  <circle cx="150" cy="100" r="200" fill="url(#glow1)"/>
-  <circle cx="1050" cy="500" r="250" fill="url(#glow2)"/>
-  <circle cx="600" cy="630" r="300" fill="url(#glow1)" opacity="0.5"/>
+  <!-- Ambient glows -->
+  <ellipse cx="150" cy="80" rx="320" ry="240" fill="url(#glow1)" opacity="0.8"/>
+  <ellipse cx="1050" cy="550" rx="300" ry="250" fill="url(#glow2)" opacity="0.8"/>
+  <ellipse cx="600" cy="320" rx="350" ry="200" fill="url(#glow3)" opacity="0.4"/>
 
   <!-- Top accent line -->
-  <rect x="0" y="0" width="1200" height="4" fill="url(#accent1)"/>
-
-  <!-- TOP BADGE -->
-  <rect x="60" y="40" width="320" height="36" rx="18" fill="url(#goldBadge)" opacity="0.15"/>
-  <rect x="60" y="40" width="320" height="36" rx="18" fill="none" stroke="url(#goldBadge)" stroke-width="1.5" opacity="0.6"/>
-  <text x="80" y="64" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#fbbf24" letter-spacing="2">⚡ AI DEVELOPMENT AGENCY</text>
-
-  <!-- MAIN TITLE -->
-  <text x="60" y="135" font-family="Arial,sans-serif" font-size="58" font-weight="900" fill="#ffffff" letter-spacing="-1">We Build</text>
-  <text x="60" y="200" font-family="Arial,sans-serif" font-size="62" font-weight="900" fill="url(#accent1)" letter-spacing="-1" filter="url(#textGlow)">AI Products</text>
-  <text x="60" y="258" font-family="Arial,sans-serif" font-size="52" font-weight="900" fill="#ffffff" letter-spacing="-1">That Actually Work</text>
-
-  <!-- Subtitle -->
-  <text x="60" y="300" font-family="Arial,sans-serif" font-size="18" fill="#94a3b8" letter-spacing="0.5">GPT-4 · Claude · LangChain · CrewAI · Next.js · React · React Native</text>
-
-  <!-- Divider -->
-  <rect x="60" y="325" width="160" height="3" rx="2" fill="url(#accent1)"/>
-
-  <!-- SERVICE CARDS ROW 1 -->
-  <!-- Card 1 -->
-  <rect x="60" y="350" width="250" height="68" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#6366f1" stroke-width="1.5" stroke-opacity="0.4"/>
-  <text x="82" y="378" font-family="Arial,sans-serif" font-size="22">🚀</text>
-  <text x="112" y="378" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#ffffff">AI Web Apps & SaaS</text>
-  <text x="112" y="400" font-family="Arial,sans-serif" font-size="11.5" fill="#94a3b8">Next.js, React, GPT-4, Stripe</text>
-
-  <!-- Card 2 -->
-  <rect x="325" y="350" width="250" height="68" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#06b6d4" stroke-width="1.5" stroke-opacity="0.4"/>
-  <text x="347" y="378" font-family="Arial,sans-serif" font-size="22">💬</text>
-  <text x="377" y="378" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#ffffff">Custom AI Chatbots</text>
-  <text x="377" y="400" font-family="Arial,sans-serif" font-size="11.5" fill="#94a3b8">WhatsApp, Telegram, Slack, RAG</text>
-
-  <!-- Card 3 -->
-  <rect x="590" y="350" width="250" height="68" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4"/>
-  <text x="612" y="378" font-family="Arial,sans-serif" font-size="22">🤖</text>
-  <text x="642" y="378" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#ffffff">AI Agents & Automation</text>
-  <text x="642" y="400" font-family="Arial,sans-serif" font-size="11.5" fill="#94a3b8">LangChain, CrewAI, Workflows</text>
-
-  <!-- SERVICE CARDS ROW 2 -->
-  <!-- Card 4 -->
-  <rect x="60" y="432" width="250" height="68" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4"/>
-  <text x="82" y="460" font-family="Arial,sans-serif" font-size="22">📱</text>
-  <text x="112" y="460" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#ffffff">Mobile Apps with AI</text>
-  <text x="112" y="482" font-family="Arial,sans-serif" font-size="11.5" fill="#94a3b8">React Native, Flutter, iOS/Android</text>
-
-  <!-- Card 5 -->
-  <rect x="325" y="432" width="250" height="68" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#ec4899" stroke-width="1.5" stroke-opacity="0.4"/>
-  <text x="347" y="460" font-family="Arial,sans-serif" font-size="22">🔗</text>
-  <text x="377" y="460" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#ffffff">AI Integrations</text>
-  <text x="377" y="482" font-family="Arial,sans-serif" font-size="11.5" fill="#94a3b8">OpenAI, Claude, Gemini APIs</text>
-
-  <!-- Card 6 -->
-  <rect x="590" y="432" width="250" height="68" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#a855f7" stroke-width="1.5" stroke-opacity="0.4"/>
-  <text x="612" y="460" font-family="Arial,sans-serif" font-size="22">🧠</text>
-  <text x="642" y="460" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#ffffff">Fine-tuning & Prompts</text>
-  <text x="642" y="482" font-family="Arial,sans-serif" font-size="11.5" fill="#94a3b8">Custom models, domain-specific AI</text>
-
-  <!-- RIGHT SIDE — PHOTO -->
-  <circle cx="980" cy="200" r="95" fill="none" stroke="url(#photoRing)" stroke-width="4" opacity="0.8"/>
-  <circle cx="980" cy="200" r="88" fill="#1a1a3e"/>
-  <image href="https://i.ibb.co/pDSMXFW/Create-linkdin-profile-202602181535.jpg" x="892" y="112" width="176" height="176" clip-path="url(#photoClip)" preserveAspectRatio="xMidYMid slice"/>
-  
-  <!-- Name -->
-  <text x="980" y="325" font-family="Arial,sans-serif" font-size="24" font-weight="800" fill="#ffffff" text-anchor="middle">Youssef E.</text>
-  <text x="980" y="350" font-family="Arial,sans-serif" font-size="14" fill="#06b6d4" text-anchor="middle" font-weight="600">AI Developer & Engineer</text>
-
-  <!-- Available badge -->
-  <rect x="920" y="365" width="120" height="28" rx="14" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1.2" stroke-opacity="0.5"/>
-  <circle cx="942" cy="379" r="5" fill="#10b981"/>
-  <text x="955" y="384" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#10b981">AVAILABLE</text>
-
-  <!-- Stats on right -->
-  <rect x="870" y="415" width="100" height="55" rx="8" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.1"/>
-  <text x="920" y="442" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="url(#accent1)" text-anchor="middle">200+</text>
-  <text x="920" y="460" font-family="Arial,sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Projects</text>
-
-  <rect x="985" y="415" width="100" height="55" rx="8" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.1"/>
-  <text x="1035" y="442" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="url(#accent1)" text-anchor="middle">30+</text>
-  <text x="1035" y="460" font-family="Arial,sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Countries</text>
-
-  <rect x="1100" y="415" width="60" height="55" rx="8" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.1"/>
-  <text x="1130" y="442" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="url(#accent1)" text-anchor="middle">5+</text>
-  <text x="1130" y="460" font-family="Arial,sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Years</text>
-
-  <!-- Star rating -->
-  <text x="890" y="500" font-family="Arial,sans-serif" font-size="16" fill="#fbbf24">★ ★ ★ ★ ★</text>
-  <text x="1010" y="500" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fbbf24">5.0</text>
-  <text x="1040" y="500" font-family="Arial,sans-serif" font-size="12" fill="#94a3b8">100% Success</text>
-
-  <!-- BOTTOM BAR -->
-  <rect x="0" y="530" width="1200" height="100" fill="#000000" fill-opacity="0.5"/>
-  <rect x="0" y="530" width="1200" height="1" fill="url(#accent1)" opacity="0.3"/>
-
-  <!-- Bottom trust badges -->
-  <text x="80" y="568" font-family="Arial,sans-serif" font-size="13" fill="#94a3b8">🚀 Fast Delivery</text>
-  <text x="240" y="568" font-family="Arial,sans-serif" font-size="13" fill="#94a3b8">💬 Quick Response</text>
-  <text x="415" y="568" font-family="Arial,sans-serif" font-size="13" fill="#94a3b8">🔄 Unlimited Revisions</text>
-  <text x="620" y="568" font-family="Arial,sans-serif" font-size="13" fill="#94a3b8">💯 100% Satisfaction</text>
-
-  <!-- CTA Button -->
-  <rect x="870" y="548" width="270" height="44" rx="22" fill="url(#cta)"/>
-  <text x="1005" y="576" font-family="Arial,sans-serif" font-size="16" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">LET'S BUILD TOGETHER →</text>
-
-  <!-- Bottom URL -->
-  <text x="60" y="608" font-family="Arial,sans-serif" font-size="12" fill="#64748b">upwork.com/freelancers/~01b65569d4f5b6a0b2</text>
-  <text x="1140" y="608" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="url(#accent1)" text-anchor="end">ACLLC</text>
+  <rect x="0" y="0" width="1200" height="3" fill="url(#topLine)"/>
 
   <!-- Bottom accent line -->
-  <rect x="0" y="626" width="1200" height="4" fill="url(#accent1)"/>
+  <rect x="0" y="627" width="1200" height="3" fill="url(#topLine)" opacity="0.7"/>
+
+  <!-- ═══ CORNER MARKS ═══ -->
+  <line x1="50" y1="30" x2="50" y2="65" stroke="#3b82f6" stroke-width="2" opacity="0.5"/>
+  <line x1="50" y1="30" x2="85" y2="30" stroke="#3b82f6" stroke-width="2" opacity="0.5"/>
+  <line x1="1150" y1="30" x2="1150" y2="65" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="1115" y1="30" x2="1150" y2="30" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="50" y1="600" x2="50" y2="565" stroke="#3b82f6" stroke-width="2" opacity="0.5"/>
+  <line x1="50" y1="600" x2="85" y2="600" stroke="#3b82f6" stroke-width="2" opacity="0.5"/>
+  <line x1="1150" y1="600" x2="1150" y2="565" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <line x1="1115" y1="600" x2="1150" y2="600" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+
+  <!-- ═══ HEADER ROW ═══ -->
+  <!-- Logo -->
+  <g transform="translate(60, 42)">
+    <circle cx="0" cy="10" r="5" fill="#3b82f6" filter="url(#glowFilter)"/>
+    <circle cx="13" cy="3" r="3.5" fill="#8b5cf6" filter="url(#glowFilter)"/>
+    <circle cx="13" cy="17" r="3.5" fill="#06b6d4" filter="url(#glowFilter)"/>
+    <line x1="5" y1="8" x2="10" y2="4" stroke="#60a5fa" stroke-width="1.2" opacity="0.6"/>
+    <line x1="5" y1="12" x2="10" y2="16" stroke="#a78bfa" stroke-width="1.2" opacity="0.6"/>
+    <line x1="13" y1="6.5" x2="13" y2="13.5" stroke="#22d3ee" stroke-width="1" opacity="0.4"/>
+    <text x="26" y="17" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="900" fill="white" letter-spacing="4">ACLLC</text>
+  </g>
+
+  <!-- Available badge -->
+  <g transform="translate(830, 36)">
+    <rect x="0" y="0" width="250" height="34" rx="17" fill="url(#badgeGrad)" stroke="#22c55e" stroke-width="1" stroke-opacity="0.4"/>
+    <circle cx="20" cy="17" r="5" fill="#22c55e"/>
+    <circle cx="20" cy="17" r="5" fill="#22c55e" opacity="0.3">
+      <animate attributeName="r" values="5;10;5" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="36" y="22" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="#34d399" letter-spacing="1.5">AVAILABLE FOR PROJECTS</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="60" y1="88" x2="1140" y2="88" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+
+  <!-- ═══ HERO TEXT ═══ -->
+  <!-- Eyebrow -->
+  <text x="60" y="128" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="#60a5fa" letter-spacing="4" opacity="0.9">AI PRODUCT ENGINEER  •  FROM CONCEPT TO DEPLOYED PRODUCT</text>
+
+  <!-- Main headline -->
+  <text x="60" y="182" font-family="Inter, system-ui, sans-serif" font-size="62" font-weight="900" letter-spacing="-2.5">
+    <tspan fill="white">We Build </tspan><tspan fill="url(#headGrad)">Intelligence.</tspan>
+  </text>
+  <text x="60" y="246" font-family="Inter, system-ui, sans-serif" font-size="62" font-weight="900" fill="white" letter-spacing="-2.5">Not Automation.</text>
+
+  <!-- Underline accent -->
+  <rect x="60" y="255" width="420" height="3.5" rx="2" fill="url(#headGrad)" opacity="0.6"/>
+
+  <!-- Subtext -->
+  <text x="60" y="294" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="400" fill="#94a3b8" letter-spacing="0.2">SaaS Dashboards  •  Mobile AI Apps  •  AI Agents  —  end-to-end, production-ready.</text>
+
+  <!-- ═══ 3 SERVICE CARDS ═══ -->
+
+  <!-- ── Card 1: SaaS Development ── -->
+  <g transform="translate(60, 320)" filter="url(#cardShadow)">
+    <rect x="0" y="0" width="340" height="175" rx="14" fill="url(#saasGrad)"/>
+    <rect x="0" y="0" width="340" height="175" rx="14" fill="none" stroke="url(#saasBorder)" stroke-width="1.5"/>
+    <!-- Top glow bar -->
+    <rect x="0" y="0" width="340" height="3" rx="2" fill="#3b82f6" opacity="0.9"/>
+    <!-- Icon -->
+    <rect x="20" y="22" width="36" height="36" rx="8" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.4"/>
+    <text x="38" y="46" font-family="Inter, system-ui, sans-serif" font-size="18" text-anchor="middle" fill="#60a5fa">⚡</text>
+    <!-- Title -->
+    <text x="64" y="36" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="800" fill="white">SaaS Development</text>
+    <text x="64" y="52" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#3b82f6" letter-spacing="1">FULL-STACK PLATFORM</text>
+    <!-- Features -->
+    <text x="20" y="85" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  Custom Dashboards &amp; Admin Panels</text>
+    <text x="20" y="104" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  Stripe Payments &amp; Subscriptions</text>
+    <text x="20" y="123" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  Firebase Backend + Vercel Deploy</text>
+    <text x="20" y="142" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  REST/GraphQL API Integration</text>
+    <!-- Price -->
+    <rect x="20" y="154" width="300" height="1" fill="rgba(59,130,246,0.2)"/>
+    <text x="20" y="170" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="#60a5fa">From $2,500</text>
+    <text x="200" y="170" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#475569">1–8 weeks delivery</text>
+  </g>
+
+  <!-- ── Card 2: Mobile AI App ── -->
+  <g transform="translate(430, 320)" filter="url(#cardShadow)">
+    <rect x="0" y="0" width="340" height="175" rx="14" fill="url(#mobileGrad)"/>
+    <rect x="0" y="0" width="340" height="175" rx="14" fill="none" stroke="url(#mobileBorder)" stroke-width="1.5"/>
+    <!-- Top glow bar -->
+    <rect x="0" y="0" width="340" height="3" rx="2" fill="#8b5cf6" opacity="0.9"/>
+    <!-- Icon -->
+    <rect x="20" y="22" width="36" height="36" rx="8" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.4"/>
+    <text x="38" y="46" font-family="Inter, system-ui, sans-serif" font-size="18" text-anchor="middle" fill="#a78bfa">📱</text>
+    <!-- Title -->
+    <text x="64" y="36" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="800" fill="white">Mobile AI App</text>
+    <text x="64" y="52" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#8b5cf6" letter-spacing="1">REACT NATIVE + AI</text>
+    <!-- Features -->
+    <text x="20" y="85" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  React Native + Expo (iOS &amp; Android)</text>
+    <text x="20" y="104" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  On-Device AI + Voice &amp; Vision</text>
+    <text x="20" y="123" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  Firebase Auth + Push Notifications</text>
+    <text x="20" y="142" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  App Store &amp; Play Store Deploy</text>
+    <!-- Price -->
+    <rect x="20" y="154" width="300" height="1" fill="rgba(139,92,246,0.2)"/>
+    <text x="20" y="170" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="#a78bfa">From $3,000</text>
+    <text x="200" y="170" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#475569">2–8 weeks delivery</text>
+  </g>
+
+  <!-- ── Card 3: AI Agent ── -->
+  <g transform="translate(800, 320)" filter="url(#cardShadow)">
+    <rect x="0" y="0" width="340" height="175" rx="14" fill="url(#agentGrad)"/>
+    <rect x="0" y="0" width="340" height="175" rx="14" fill="none" stroke="url(#agentBorder)" stroke-width="1.5"/>
+    <!-- Top glow bar -->
+    <rect x="0" y="0" width="340" height="3" rx="2" fill="#06b6d4" opacity="0.9"/>
+    <!-- Icon -->
+    <rect x="20" y="22" width="36" height="36" rx="8" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.4"/>
+    <text x="38" y="46" font-family="Inter, system-ui, sans-serif" font-size="18" text-anchor="middle" fill="#22d3ee">🤖</text>
+    <!-- Title -->
+    <text x="64" y="36" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="800" fill="white">AI Agent</text>
+    <text x="64" y="52" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#06b6d4" letter-spacing="1">LANGGRAPH + LANGCHAIN</text>
+    <!-- Features -->
+    <text x="20" y="85" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  Multi-Agent Reasoning Systems</text>
+    <text x="20" y="104" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  RAG Pipelines + Vector DBs</text>
+    <text x="20" y="123" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  OpenAI + Anthropic Powered</text>
+    <text x="20" y="142" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#94a3b8">→  80% Faster Research — Real Results</text>
+    <!-- Price -->
+    <rect x="20" y="154" width="300" height="1" fill="rgba(6,182,212,0.2)"/>
+    <text x="20" y="170" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="#22d3ee">From $1,500</text>
+    <text x="200" y="170" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="500" fill="#475569">1–6 weeks delivery</text>
+  </g>
+
+  <!-- ═══ BOTTOM ROW ═══ -->
+
+  <!-- Tech pills -->
+  <g transform="translate(60, 518)">
+    <text x="0" y="0" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="700" fill="#334155" letter-spacing="3">STACK</text>
+
+    <!-- Pills -->
+    <g transform="translate(0, 10)">
+      <rect x="0" y="0" width="88" height="24" rx="5" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="44" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#60a5fa" text-anchor="middle">LangChain</text>
+
+      <rect x="96" y="0" width="88" height="24" rx="5" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="140" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#60a5fa" text-anchor="middle">LangGraph</text>
+
+      <rect x="192" y="0" width="72" height="24" rx="5" fill="rgba(167,139,250,0.1)" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="228" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#a78bfa" text-anchor="middle">OpenAI</text>
+
+      <rect x="272" y="0" width="84" height="24" rx="5" fill="rgba(167,139,250,0.1)" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="314" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#a78bfa" text-anchor="middle">Anthropic</text>
+
+      <rect x="364" y="0" width="68" height="24" rx="5" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+      <text x="398" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#e2e8f0" text-anchor="middle">Next.js</text>
+
+      <rect x="440" y="0" width="74" height="24" rx="5" fill="rgba(251,191,36,0.1)" stroke="#fbbf24" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="477" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#fbbf24" text-anchor="middle">Firebase</text>
+
+      <rect x="522" y="0" width="62" height="24" rx="5" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="553" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#c084fc" text-anchor="middle">Stripe</text>
+
+      <rect x="592" y="0" width="62" height="24" rx="5" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+      <text x="623" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#e2e8f0" text-anchor="middle">Vercel</text>
+
+      <rect x="662" y="0" width="86" height="24" rx="5" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="705" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#22d3ee" text-anchor="middle">Vector DBs</text>
+
+      <rect x="756" y="0" width="100" height="24" rx="5" fill="rgba(52,211,153,0.1)" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.35"/>
+      <text x="806" y="16" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#34d399" text-anchor="middle">React Native</text>
+    </g>
+  </g>
+
+  <!-- Stats -->
+  <g transform="translate(60, 590)">
+    <text font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#94a3b8">
+      <tspan fill="#34d399" font-weight="800">50+</tspan>
+      <tspan fill="#475569" dx="4">sources analyzed  •  </tspan>
+      <tspan fill="#34d399" font-weight="800">80%</tspan>
+      <tspan fill="#475569" dx="4">faster research  •  </tspan>
+      <tspan fill="white" font-weight="700">3 core services</tspan>
+      <tspan fill="#475569" dx="4">  •  production-ready</tspan>
+    </text>
+  </g>
+
+  <!-- CTA -->
+  <g transform="translate(820, 575)">
+    <rect x="0" y="0" width="320" height="44" rx="10" fill="rgba(139,92,246,0.15)" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.5"/>
+    <text x="160" y="27" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">DM on WhatsApp  →  +212 638-426738</text>
+  </g>
+
 </svg>

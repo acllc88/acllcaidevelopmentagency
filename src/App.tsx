@@ -1,1180 +1,1330 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import html2canvas from 'html2canvas-pro';
-import { jsPDF } from 'jspdf';
-import {
-  Download,
-  Bot,
-  Globe,
-  Zap,
-  TrendingUp,
-  Award,
-  ChevronRight,
-  Star,
-  ArrowRight,
-  Sparkles,
-  BrainCircuit,
-  Layers,
-  Code2,
-  Rocket,
-  Shield,
-  Clock,
-  BarChart3,
-  CheckCircle2,
-  ExternalLink,
-  Mail,
-  MapPin,
-  FileText,
-  Loader2,
-  Monitor,
-  ShieldCheck,
-  ChevronLeft,
-  Server,
-} from 'lucide-react';
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import ChatBot from "./components/ChatBot";
 
-/* ─── Constants ───────────────────────────────────── */
-const UPWORK_URL = 'https://www.upwork.com/freelancers/~01b65569d4f5b6a0b2';
-const NAME = 'ACLLC';
-const PROFILE_IMG = 'https://i.ibb.co/pDSMXFW/Create-linkdin-profile-202602181535.jpg';
-const PLATFORM_URL = 'https://actlikeyouknowplatform.vercel.app/';
-
-const USER_DASHBOARD_IMGS = [
-  'https://i.ibb.co/23Txc6Ld/Screen-Shot-2026-03-04-at-1-09-53-AM.png',
-  'https://i.ibb.co/m5rSzbZY/Screen-Shot-2026-03-04-at-1-10-07-AM.png',
-  'https://i.ibb.co/RkpdqMqH/Screen-Shot-2026-03-04-at-1-10-19-AM.png',
-  'https://i.ibb.co/N2S9mVBx/Screen-Shot-2026-03-04-at-1-10-30-AM.png',
-  'https://i.ibb.co/pvK905tY/Screen-Shot-2026-03-04-at-1-10-43-AM.png',
-  'https://i.ibb.co/rR1C9XnN/Screen-Shot-2026-03-04-at-1-11-03-AM.png',
-];
-
-const ADMIN_DASHBOARD_IMGS = [
-  'https://i.ibb.co/DHgRj1NY/Screen-Shot-2026-03-04-at-1-11-26-AM.png',
-  'https://i.ibb.co/4HCYy1V/Screen-Shot-2026-03-04-at-1-11-42-AM.png',
-  'https://i.ibb.co/GQsTYB1K/Screen-Shot-2026-03-04-at-1-11-54-AM.png',
-  'https://i.ibb.co/Myym57QS/Screen-Shot-2026-03-04-at-1-12-05-AM.png',
-  'https://i.ibb.co/qL00zPzb/Screen-Shot-2026-03-04-at-1-12-17-AM.png',
-  'https://i.ibb.co/d0L2HVPX/Screen-Shot-2026-03-04-at-1-12-32-AM.png',
-  'https://i.ibb.co/HTR0k5RQ/Screen-Shot-2026-03-04-at-1-12-43-AM.png',
-  'https://i.ibb.co/Q3cBtQcm/Screen-Shot-2026-03-04-at-1-12-55-AM.png',
-];
-
-/* ─── New Services Data ────────────────────────────── */
-const SERVICES = [
-  {
-    emoji: '🤖',
-    icon: <Bot className="w-7 h-7" />,
-    title: 'AI Agents & Automation',
-    color: 'from-emerald-400 to-emerald-600',
-    border: 'border-emerald-500/30',
-    glow: 'hover:shadow-emerald-500/20',
-    accentColor: '#34d399',
-    items: [
-      'Autonomous customer support agents (80%+ inquiry automation)',
-      'LangChain/LangGraph workflow orchestration',
-      'RAG-powered knowledge bases with vector databases (Pinecone, Weaviate)',
-      'Multi-agent systems for complex business processes',
-    ],
-  },
-  {
-    emoji: '⚡',
-    icon: <Zap className="w-7 h-7" />,
-    title: 'Full-Stack AI Applications',
-    color: 'from-brand-500 to-brand-700',
-    border: 'border-brand-500/30',
-    glow: 'hover:shadow-brand-500/20',
-    accentColor: '#818cf8',
-    items: [
-      'Next.js/React apps deployed on Vercel (edge-optimized)',
-      'Firebase backend (Auth, Firestore, Cloud Functions, Storage)',
-      'Stripe integration (subscriptions, usage-based billing, webhooks)',
-      'Real-time AI streaming responses & serverless architectures',
-    ],
-  },
-  {
-    emoji: '🔧',
-    icon: <Server className="w-7 h-7" />,
-    title: 'Integration & Deployment',
-    color: 'from-cyan-400 to-cyan-500',
-    border: 'border-cyan-500/30',
-    glow: 'hover:shadow-cyan-500/20',
-    accentColor: '#22d3ee',
-    items: [
-      'OpenAI, Anthropic, Groq API integration',
-      'Custom AI API development & webhook automation',
-      'CI/CD pipelines for AI apps (GitHub Actions, Vercel)',
-      'Performance optimization (sub-2s response times)',
-    ],
-  },
-];
-
-/* ─── Animated Counter ────────────────────────────── */
-function AnimatedStat({ value, suffix = '', prefix = '' }: { value: string; suffix?: string; prefix?: string }) {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.3 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+/* ─── Particles ─── */
+function ParticleField() {
+  const particles = Array.from({ length: 35 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    duration: Math.random() * 20 + 10,
+    delay: Math.random() * 5,
+  }));
   return (
-    <div ref={ref} className={`transition-all duration-700 ${visible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
-      <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold gradient-text">{prefix}{value}{suffix}</span>
-    </div>
-  );
-}
-
-/* ─── Section Wrapper ─────────────────────────────── */
-function Section({ children, className = '', id = '' }: { children: React.ReactNode; className?: string; id?: string }) {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <section ref={ref} id={id} className={`transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${className}`}>
-      {children}
-    </section>
-  );
-}
-
-/* ─── Screenshot Gallery (Website) ─────────────────── */
-function ScreenshotGallery({ images, label }: { images: string[]; label: string }) {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [imgErrors, setImgErrors] = useState<Set<number>>(new Set());
-
-  const prev = () => setActiveIdx(i => (i - 1 + images.length) % images.length);
-  const next = () => setActiveIdx(i => (i + 1) % images.length);
-
-  return (
-    <div>
-      {/* Main image — full view, no crop */}
-      <div className="relative rounded-lg sm:rounded-xl overflow-hidden border border-slate-700/50 bg-black mb-3 sm:mb-4 group" style={{ minHeight: 200 }}>
-        {imgErrors.has(activeIdx) ? (
-          <div className="w-full flex items-center justify-center bg-slate-800/50 py-16 sm:py-24 md:py-32">
-            <div className="text-center">
-              <Monitor className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 text-slate-600 mx-auto mb-2" />
-              <p className="text-slate-500 text-xs sm:text-sm">{label} — Screen {activeIdx + 1}</p>
-            </div>
-          </div>
-        ) : (
-          <img
-            src={images[activeIdx]}
-            alt={`${label} screenshot ${activeIdx + 1}`}
-            className="w-full h-auto max-h-[300px] sm:max-h-[450px] md:max-h-[600px] object-contain mx-auto block transition-all duration-500"
-            style={{ backgroundColor: '#0a0a0a' }}
-            onError={() => setImgErrors(prev => new Set(prev).add(activeIdx))}
-          />
-        )}
-        {/* Nav arrows - always visible on mobile */}
-        <button onClick={prev} className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-black/90 cursor-pointer z-10">
-          <ChevronLeft className="w-4 sm:w-5 h-4 sm:h-5" />
-        </button>
-        <button onClick={next} className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-black/70 border border-white/20 flex items-center justify-center text-white opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-black/90 cursor-pointer z-10">
-          <ChevronRight className="w-4 sm:w-5 h-4 sm:h-5" />
-        </button>
-        {/* Counter */}
-        <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 bg-black/70 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs text-white/80 font-medium z-10">
-          {activeIdx + 1} / {images.length}
-        </div>
-      </div>
-      {/* Thumbnails — responsive */}
-      <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        {images.map((img, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveIdx(i)}
-            className={`flex-shrink-0 w-16 sm:w-20 md:w-28 h-12 sm:h-14 md:h-20 rounded-md sm:rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-black ${
-              i === activeIdx ? 'border-brand-500 shadow-lg shadow-brand-500/30 scale-105' : 'border-slate-700/50 opacity-50 hover:opacity-90'
-            }`}
-          >
-            {imgErrors.has(i) ? (
-              <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                <span className="text-[8px] sm:text-[10px] text-slate-500">{i + 1}</span>
-              </div>
-            ) : (
-              <img
-                src={img}
-                alt={`Thumb ${i + 1}`}
-                className="w-full h-full object-contain bg-black"
-                onError={() => setImgErrors(prev => new Set(prev).add(i))}
-              />
-            )}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-/* ══════════════════════════════════════════════════════
-   PDF TEMPLATE — 100% inline styles for html2canvas
-   ══════════════════════════════════════════════════════ */
-function PdfTemplate() {
-  const bg = '#0b1120';
-  const cardBg = '#151d2e';
-  const cardBorder = '#1e2d45';
-  const textWhite = '#f1f5f9';
-  const textGray = '#94a3b8';
-  const textMuted = '#64748b';
-  const brand = '#818cf8';
-  const brandDark = '#4f46e5';
-  const cyan = '#22d3ee';
-  const emerald = '#34d399';
-  const rose = '#fb7185';
-  const amber = '#fbbf24';
-
-  const sectionTitle = (color: string, label: string, title: string, subtitle?: string) => (
-    <div style={{ textAlign: 'center', marginBottom: 40 }}>
-      <div style={{ color, fontSize: 12, fontWeight: 800, letterSpacing: 3, textTransform: 'uppercase' as const, marginBottom: 8 }}>{label}</div>
-      <div style={{ color: textWhite, fontSize: 36, fontWeight: 900, lineHeight: 1.2 }}>{title}</div>
-      {subtitle && <div style={{ color: textGray, fontSize: 15, marginTop: 10, maxWidth: 550, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>{subtitle}</div>}
-    </div>
-  );
-
-  const serviceCardPdf = (emoji: string, title: string, items: string[], accentColor: string) => (
-    <div style={{
-      background: cardBg,
-      border: `1px solid ${cardBorder}`,
-      borderRadius: 16,
-      padding: '24px 20px',
-      borderTop: `3px solid ${accentColor}`,
-    }}>
-      <div style={{ fontSize: 28, marginBottom: 10 }}>{emoji}</div>
-      <div style={{ color: textWhite, fontSize: 17, fontWeight: 700, marginBottom: 12 }}>{title}</div>
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 8 }}>
-        {items.map((item, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-            <span style={{ color: accentColor, fontSize: 14, lineHeight: 1.5 }}>•</span>
-            <span style={{ color: textGray, fontSize: 12, lineHeight: 1.5 }}>{item}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const resultCard = (emoji: string, title: string, metric: string, metricLabel: string, detail: string, accentColor: string) => (
-    <div style={{
-      background: cardBg,
-      border: `1px solid ${cardBorder}`,
-      borderRadius: 16,
-      padding: 24,
-      borderLeft: `4px solid ${accentColor}`,
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: 16,
-    }}>
-      <div style={{ fontSize: 32, flexShrink: 0, lineHeight: 1 }}>{emoji}</div>
-      <div>
-        <div style={{ color: textGray, fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{title}</div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
-          <span style={{ color: accentColor, fontSize: 30, fontWeight: 900 }}>{metric}</span>
-          <span style={{ color: textGray, fontSize: 13, fontWeight: 600 }}>{metricLabel}</span>
-        </div>
-        <div style={{ color: textMuted, fontSize: 12 }}>{detail}</div>
-      </div>
-    </div>
-  );
-
-  /* Screenshot grid for PDF — uses object-contain, no crop */
-  const screenshotGrid = (images: string[], label: string) => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-      {images.map((img, i) => (
-        <div key={i} style={{
-          borderRadius: 12,
-          overflow: 'hidden',
-          border: `1px solid ${cardBorder}`,
-          background: '#000',
-          height: 200,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <img
-            src={img}
-            alt={`${label} ${i + 1}`}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              display: 'block',
-              backgroundColor: '#000',
-            }}
-          />
-        </div>
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-accent/20"
+          style={{ width: p.size, height: p.size, left: `${p.x}%`, top: `${p.y}%` }}
+          animate={{ y: [0, -30, 0], opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
+        />
       ))}
     </div>
   );
+}
 
+/* ─── Grid ─── */
+function GridBackground() {
   return (
-    <div style={{
-      width: 1200,
-      background: bg,
-      color: textWhite,
-      fontFamily: "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",
-      overflow: 'hidden',
-    }}>
-      {/* ─── HERO ─── */}
-      <div style={{
-        background: `linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)`,
-        padding: '60px 60px 50px 60px',
-        position: 'relative',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 50 }}>
-          {/* Left text */}
-          <div style={{ flex: 1 }}>
-            <div style={{
-              display: 'inline-block',
-              background: 'rgba(99,102,241,0.15)',
-              border: '1px solid rgba(99,102,241,0.3)',
-              borderRadius: 30,
-              padding: '6px 16px',
-              fontSize: 13,
-              color: brand,
-              fontWeight: 600,
-              marginBottom: 20,
-            }}>
-              ✨ Top Rated · AI Development Agency
-            </div>
-            <div style={{ fontSize: 48, fontWeight: 900, lineHeight: 1.1, marginBottom: 14, color: textWhite }}>
-              We Build <span style={{ color: brand }}>AI Products</span>
-              <br />That Actually Work
-            </div>
-            <div style={{ fontSize: 17, color: brand, fontWeight: 600, marginBottom: 10 }}>
-              {NAME} — AI Development Agency
-            </div>
-            <div style={{ fontSize: 16, color: textGray, lineHeight: 1.7, maxWidth: 520, marginBottom: 20 }}>
-              Fast, clean, and built to scale. From GPT-4 powered SaaS platforms to autonomous AI agents — we turn your AI ideas into production-ready products.
-            </div>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              background: 'rgba(99,102,241,0.15)',
-              border: '1px solid rgba(99,102,241,0.3)',
-              borderRadius: 30,
-              padding: '8px 20px',
-              fontSize: 13,
-              color: '#c7d2fe',
-            }}>
-              🌐 {UPWORK_URL}
-            </div>
-          </div>
-          {/* Right avatar with photo */}
-          <div style={{ flexShrink: 0, position: 'relative' }}>
-            <div style={{
-              width: 220,
-              height: 260,
-              borderRadius: 24,
-              background: `linear-gradient(135deg, ${brandDark}, ${cyan}, ${emerald})`,
-              padding: 3,
-            }}>
-              <div style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 22,
-                overflow: 'hidden',
-                background: '#0f172a',
-                boxSizing: 'border-box',
-              }}>
-                <img
-                  src={PROFILE_IMG}
-                  alt={NAME}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
-            </div>
-            {/* Badges */}
-            <div style={{
-              position: 'absolute',
-              top: -8,
-              right: -8,
-              background: 'rgba(16,185,129,0.2)',
-              border: '1px solid rgba(16,185,129,0.4)',
-              borderRadius: 10,
-              padding: '5px 12px',
-              fontSize: 11,
-              fontWeight: 700,
-              color: emerald,
-            }}>✅ Available Now</div>
-            <div style={{
-              position: 'absolute',
-              bottom: -8,
-              left: -8,
-              background: 'rgba(251,191,36,0.2)',
-              border: '1px solid rgba(251,191,36,0.4)',
-              borderRadius: 10,
-              padding: '5px 12px',
-              fontSize: 11,
-              fontWeight: 700,
-              color: amber,
-            }}>⭐ 5.0 Rating</div>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 50 }}>
-          {[
-            { val: '5+', label: 'Years Experience', emoji: '⏱', color: brand },
-            { val: '200+', label: 'Projects Delivered', emoji: '🏆', color: cyan },
-            { val: '30+', label: 'Countries Served', emoji: '🌍', color: emerald },
-            { val: '100%', label: 'Job Success', emoji: '🛡', color: amber },
-          ].map((s, i) => (
-            <div key={i} style={{
-              background: 'rgba(30,41,59,0.8)',
-              border: `1px solid rgba(99,102,241,0.2)`,
-              borderRadius: 16,
-              padding: '20px 16px',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: 22, marginBottom: 8 }}>{s.emoji}</div>
-              <div style={{ fontSize: 36, fontWeight: 900, color: s.color, marginBottom: 4 }}>{s.val}</div>
-              <div style={{ fontSize: 13, color: textGray, fontWeight: 500 }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── WHAT WE BUILD ─── */}
-      <div style={{ padding: '50px 60px' }}>
-        {sectionTitle(brand, 'SERVICES', 'What We Build', 'End-to-end AI solutions — from concept to production. Every project is built for performance, scalability, and real business impact.')}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-          {SERVICES.map((service) => (
-            serviceCardPdf(service.emoji, service.title, service.items, service.accentColor)
-          ))}
-        </div>
-      </div>
-
-      {/* ─── RESULTS ─── */}
-      <div style={{ padding: '50px 60px' }}>
-        {sectionTitle(emerald, 'PROVEN IMPACT', 'Recent Results', "Numbers don't lie. Here's the real-world impact our AI solutions have delivered for clients.")}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
-          {resultCard('🤖', 'E-Commerce Chatbot', '70%', 'Support Ticket Reduction', '800+ queries/day fully automated', cyan)}
-          {resultCard('🚀', 'AI SaaS Platform', '2,000', 'Users in Week 1', 'Signed up within the first week of launch', brand)}
-          {resultCard('📊', 'Investment Research Agent', '25hrs', 'Saved Per Week', 'For a 6-person research team', emerald)}
-          {resultCard('📈', 'Mobile AI App', '50K', 'Downloads in 3 Months', 'Post-launch growth trajectory', rose)}
-        </div>
-      </div>
-
-      {/* ─── FEATURED CREATION ─── */}
-      <div style={{ padding: '50px 60px' }}>
-        {sectionTitle(rose, 'FEATURED CREATION', 'ActLikeYouKnow Platform', 'A full-stack AI-powered SaaS platform — designed, built, and deployed from scratch.')}
-
-        {/* Platform link */}
-        <div style={{ textAlign: 'center', marginBottom: 30 }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            background: 'rgba(251,113,133,0.1)',
-            border: '1px solid rgba(251,113,133,0.3)',
-            borderRadius: 30,
-            padding: '8px 22px',
-            fontSize: 14,
-            color: rose,
-            fontWeight: 600,
-          }}>
-            🔗 {PLATFORM_URL}
-          </div>
-        </div>
-
-        {/* User Dashboard */}
-        <div style={{ marginBottom: 30 }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            marginBottom: 16,
-          }}>
-            <div style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              background: 'rgba(99,102,241,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 18,
-            }}>👤</div>
-            <div>
-              <div style={{ color: textWhite, fontSize: 18, fontWeight: 700 }}>User Dashboard</div>
-              <div style={{ color: textMuted, fontSize: 12 }}>Clean, intuitive interface for end users</div>
-            </div>
-          </div>
-          {screenshotGrid(USER_DASHBOARD_IMGS, 'User Dashboard')}
-        </div>
-
-        {/* Admin Dashboard */}
-        <div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            marginBottom: 16,
-          }}>
-            <div style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              background: 'rgba(251,191,36,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 18,
-            }}>🛡</div>
-            <div>
-              <div style={{ color: textWhite, fontSize: 18, fontWeight: 700 }}>Admin Dashboard</div>
-              <div style={{ color: textMuted, fontSize: 12 }}>Powerful management & analytics panel</div>
-            </div>
-          </div>
-          {screenshotGrid(ADMIN_DASHBOARD_IMGS, 'Admin Dashboard')}
-        </div>
-      </div>
-
-      {/* ─── TECH STACK ─── */}
-      <div style={{ padding: '50px 60px' }}>
-        {sectionTitle(cyan, 'TECH STACK', 'Tools & Technologies')}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-          {[
-            { category: 'AI / LLM', items: ['GPT-4 / GPT-4o', 'Claude 3.5', 'Groq', 'LangChain', 'LangGraph', 'RAG Systems', 'Pinecone', 'Weaviate'] },
-            { category: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'React Native', 'Flutter'] },
-            { category: 'Backend', items: ['Node.js', 'Python', 'FastAPI', 'Firebase', 'Firestore', 'Cloud Functions', 'PostgreSQL'] },
-            { category: 'Infra & Tools', items: ['Vercel', 'AWS', 'Docker', 'Stripe', 'GitHub Actions', 'CI/CD', 'Webhooks'] },
-          ].map((group, i) => (
-            <div key={i} style={{ background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: 16, padding: 20 }}>
-              <div style={{ color: brand, fontSize: 12, fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: 2, marginBottom: 14 }}>{group.category}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 6 }}>
-                {group.items.map((item, j) => (
-                  <span key={j} style={{
-                    fontSize: 11,
-                    fontWeight: 500,
-                    background: '#1e293b',
-                    color: '#cbd5e1',
-                    border: '1px solid #334155',
-                    padding: '4px 10px',
-                    borderRadius: 8,
-                  }}>{item}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── HOW WE WORK ─── */}
-      <div style={{ padding: '50px 60px' }}>
-        {sectionTitle(amber, 'PROCESS', 'How We Work', 'A streamlined, transparent process designed to move fast and deliver results — all async, no calls needed.')}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-          {[
-            { num: '01', title: 'Share Your Brief', desc: 'Send us your project details — goals, users, and requirements. We respond within hours.', emoji: '📋' },
-            { num: '02', title: 'Architecture & Plan', desc: 'We design the system, choose the right AI models, and define clear milestones.', emoji: '📐' },
-            { num: '03', title: 'Build & Iterate', desc: 'Rapid development with weekly demos and async feedback loops.', emoji: '💻' },
-            { num: '04', title: 'Launch & Support', desc: 'Deploy to production with monitoring, docs, and ongoing support.', emoji: '🚀' },
-          ].map((step, i) => (
-            <div key={i} style={{ background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: 16, padding: 24 }}>
-              <div style={{ fontSize: 40, fontWeight: 900, color: '#1e293b', marginBottom: 12 }}>{step.num}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <span style={{ fontSize: 18 }}>{step.emoji}</span>
-                <span style={{ color: textWhite, fontSize: 16, fontWeight: 700 }}>{step.title}</span>
-              </div>
-              <div style={{ color: textGray, fontSize: 13, lineHeight: 1.6 }}>{step.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── WHY CHOOSE US ─── */}
-      <div style={{ padding: '50px 60px' }}>
-        {sectionTitle(rose, 'WHY CHOOSE US', 'The Difference')}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-          {[
-            { emoji: '⚡', title: 'Ship Fast', desc: 'We move at startup speed. Most MVPs are ready in 2–4 weeks. You get weekly demos and constant communication.', color: amber },
-            { emoji: '🛡', title: 'Production-Grade', desc: 'No throwaway code. Everything is built with clean architecture, proper error handling, testing, and documentation.', color: emerald },
-            { emoji: '📈', title: 'Business-First Thinking', desc: "We don't just write code — we understand your business goals and engineer solutions that drive measurable ROI.", color: brand },
-          ].map((item, i) => (
-            <div key={i} style={{
-              background: cardBg,
-              border: `1px solid ${cardBorder}`,
-              borderRadius: 16,
-              padding: 28,
-              textAlign: 'center',
-            }}>
-              <div style={{
-                width: 60,
-                height: 60,
-                borderRadius: 16,
-                background: '#1e293b',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-                fontSize: 28,
-              }}>{item.emoji}</div>
-              <div style={{ color: textWhite, fontSize: 18, fontWeight: 700, marginBottom: 10 }}>{item.title}</div>
-              <div style={{ color: textGray, fontSize: 13, lineHeight: 1.7 }}>{item.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── TESTIMONIAL ─── */}
-      <div style={{ padding: '30px 60px' }}>
-        <div style={{
-          background: `linear-gradient(135deg, #1e1b4b, #0f172a, #1e1b4b)`,
-          border: '1px solid rgba(99,102,241,0.2)',
-          borderRadius: 24,
-          padding: '40px 50px',
-          textAlign: 'center',
-        }}>
-          <div style={{ marginBottom: 16, fontSize: 22, letterSpacing: 2 }}>⭐⭐⭐⭐⭐</div>
-          <div style={{ fontSize: 20, fontWeight: 500, color: '#e2e8f0', lineHeight: 1.7, fontStyle: 'italic', maxWidth: 650, margin: '0 auto 16px' }}>
-            "Exceptional AI development team. Delivered a complex GPT-4 integrated platform ahead of schedule with impeccable code quality. Already planning our next project together."
-          </div>
-          <div style={{ color: textMuted, fontSize: 13, fontWeight: 600 }}>— Startup Founder, USA</div>
-        </div>
-      </div>
-
-      {/* ─── CTA ─── */}
-      <div style={{ padding: '40px 60px 30px' }}>
-        <div style={{
-          background: `linear-gradient(135deg, ${brandDark}, #3730a3, ${brandDark})`,
-          borderRadius: 24,
-          padding: '50px 40px',
-          textAlign: 'center',
-        }}>
-          <div style={{ fontSize: 28, marginBottom: 12 }}>✨</div>
-          <div style={{ fontSize: 36, fontWeight: 900, color: textWhite, marginBottom: 12 }}>Ready to Build Something Amazing?</div>
-          <div style={{ fontSize: 16, color: '#c7d2fe', lineHeight: 1.7, maxWidth: 500, margin: '0 auto 24px' }}>
-            Send us your project brief on Upwork. We typically respond within 2 hours and can start within the week.
-          </div>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 10,
-            background: '#fff',
-            color: brandDark,
-            padding: '12px 32px',
-            borderRadius: 30,
-            fontSize: 16,
-            fontWeight: 800,
-          }}>
-            🔗 Hire Us on Upwork
-          </div>
-          <div style={{
-            marginTop: 16,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            background: 'rgba(255,255,255,0.1)',
-            borderRadius: 30,
-            padding: '8px 20px',
-            fontSize: 13,
-            color: '#c7d2fe',
-          }}>
-            🌐 {UPWORK_URL}
-          </div>
-          <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 30, color: 'rgba(199,210,254,0.7)', fontSize: 13 }}>
-            <span>✉ Quick Response</span>
-            <span>⏱ Flexible Hours</span>
-            <span>📍 Remote Worldwide</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ─── FOOTER ─── */}
-      <div style={{ padding: '20px 60px 40px', textAlign: 'center', borderTop: '1px solid #1e293b' }}>
-        <div style={{ color: textMuted, fontSize: 13 }}>
-          🧠 ACLLC. · AI Development Agency · Built with passion for intelligent software
-        </div>
-      </div>
+    <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03]">
+      <div
+        className="w-full h-full"
+        style={{
+          backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px),linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
+          backgroundSize: "60px 60px",
+        }}
+      />
     </div>
   );
 }
 
-/* ══════════════════════════════════════════════════════
-   MAIN APP — Website + PDF Download
-   ══════════════════════════════════════════════════════ */
-export default function App() {
-  const [scrollY, setScrollY] = useState(0);
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [activeTab, setActiveTab] = useState<'user' | 'admin'>('user');
-  const pdfRef = useRef<HTMLDivElement>(null);
+/* ─── Section ─── */
+function Section({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <motion.section
+      id={id}
+      ref={ref}
+      className={`relative z-10 ${className}`}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {children}
+    </motion.section>
+  );
+}
+
+/* ─── GlowCard ─── */
+function GlowCard({ children, className = "", glowColor = "accent" }: { children: React.ReactNode; className?: string; glowColor?: string }) {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+  const glowColors: Record<string, string> = {
+    accent: "99, 102, 241",
+    green: "34, 197, 94",
+    amber: "245, 158, 11",
+    red: "239, 68, 68",
+    purple: "168, 85, 247",
+    blue: "59, 130, 246",
+    cyan: "6, 182, 212",
+  };
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      className={`relative group rounded-xl border border-border bg-surface-card overflow-hidden transition-all duration-300 hover:border-accent/30 ${className}`}
+    >
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{
+          background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(${glowColors[glowColor] || glowColors.accent}, 0.07), transparent 60%)`,
+        }}
+      />
+      {children}
+    </div>
+  );
+}
+
+/* ─── WhatsApp SVG ─── */
+const WaSvg = ({ cls = "w-5 h-5" }: { cls?: string }) => (
+  <svg className={cls} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
+
+/* ─── Nav ─── */
+function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handler = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  // Preload images (no crossOrigin to avoid CORS issues)
   useEffect(() => {
-    const allImages = [PROFILE_IMG, ...USER_DASHBOARD_IMGS, ...ADMIN_DASHBOARD_IMGS];
-    allImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, []);
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
 
-  const handleDownloadPDF = useCallback(async () => {
-    if (!pdfRef.current || isGeneratingPDF) return;
-    setIsGeneratingPDF(true);
-
-    try {
-      // Longer wait for all images to fully load
-      await new Promise(r => setTimeout(r, 3000));
-
-      const el = pdfRef.current;
-
-      const canvas = await html2canvas(el, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#0b1120',
-        logging: false,
-        width: 1200,
-        windowWidth: 1200,
-        imageTimeout: 60000,
-        removeContainer: false,
-        onclone: (doc) => {
-          const pdfEl = doc.querySelector('[data-pdf-template]') as HTMLElement;
-          if (pdfEl) {
-            pdfEl.style.position = 'static';
-            pdfEl.style.left = '0';
-            pdfEl.style.top = '0';
-            pdfEl.style.zIndex = '1';
-          }
-        },
-      });
-
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-
-      const pdfPageWidth = 210; // A4 mm
-      const pdfPageHeight = 297;
-      const ratio = pdfPageWidth / imgWidth;
-      const totalScaledHeight = imgHeight * ratio;
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      let page = 0;
-
-      while (page * pdfPageHeight < totalScaledHeight) {
-        if (page > 0) pdf.addPage();
-
-        const sourceY = (page * pdfPageHeight) / ratio;
-        const sourceH = Math.min(pdfPageHeight / ratio, imgHeight - sourceY);
-
-        const pageCanvas = document.createElement('canvas');
-        pageCanvas.width = imgWidth;
-        pageCanvas.height = Math.ceil(sourceH);
-        const ctx = pageCanvas.getContext('2d');
-        if (ctx) {
-          ctx.fillStyle = '#0b1120';
-          ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-          ctx.drawImage(canvas, 0, sourceY, imgWidth, sourceH, 0, 0, imgWidth, sourceH);
-        }
-
-        const pageImg = pageCanvas.toDataURL('image/jpeg', 0.95);
-        pdf.addImage(pageImg, 'JPEG', 0, 0, pdfPageWidth, sourceH * ratio);
-        page++;
-      }
-
-      pdf.save(`ACLLC_AI_Development_Portfolio.pdf`);
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      // Fallback: open print dialog
-      window.print();
-    } finally {
-      setIsGeneratingPDF(false);
-    }
-  }, [isGeneratingPDF]);
-
-  const results = [
-    { icon: <Bot className="w-8 h-8 text-cyan-400" />, title: 'E-Commerce Chatbot', metric: '70%', metricLabel: 'Support Ticket Reduction', detail: '800+ queries/day fully automated', color: 'cyan' },
-    { icon: <Rocket className="w-8 h-8 text-brand-400" />, title: 'AI SaaS Platform', metric: '2,000', metricLabel: 'Users in Week 1', detail: 'Signed up within the first week of launch', color: 'brand' },
-    { icon: <BarChart3 className="w-8 h-8 text-emerald-400" />, title: 'Investment Research Agent', metric: '25hrs', metricLabel: 'Saved Per Week', detail: 'For a 6-person research team', color: 'emerald' },
-    { icon: <TrendingUp className="w-8 h-8 text-rose-400" />, title: 'Mobile AI App', metric: '50K', metricLabel: 'Downloads in 3 Months', detail: 'Post-launch growth trajectory', color: 'rose' },
-  ];
-
-  const techStack = [
-    { category: 'AI / LLM', items: ['GPT-4 / GPT-4o', 'Claude 3.5', 'Groq', 'LangChain', 'LangGraph', 'RAG Systems', 'Pinecone', 'Weaviate'] },
-    { category: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'React Native', 'Flutter'] },
-    { category: 'Backend', items: ['Node.js', 'Python', 'FastAPI', 'Firebase', 'Firestore', 'Cloud Functions', 'PostgreSQL'] },
-    { category: 'Infra & Tools', items: ['Vercel', 'AWS', 'Docker', 'Stripe', 'GitHub Actions', 'CI/CD', 'Webhooks'] },
-  ];
-
-  const processSteps = [
-    { num: '01', title: 'Share Your Brief', desc: 'Send us your project details — goals, users, and requirements. We respond within hours.', icon: <FileText className="w-6 h-6" /> },
-    { num: '02', title: 'Architecture & Plan', desc: 'We design the system, choose the right AI models, and define clear milestones.', icon: <Layers className="w-6 h-6" /> },
-    { num: '03', title: 'Build & Iterate', desc: 'Rapid development with weekly demos and async feedback loops.', icon: <Code2 className="w-6 h-6" /> },
-    { num: '04', title: 'Launch & Support', desc: 'Deploy to production with monitoring, docs, and ongoing support.', icon: <Rocket className="w-6 h-6" /> },
+  const links = [
+    { href: "#services", label: "Services" },
+    { href: "#saas", label: "SaaS" },
+    { href: "#mobile", label: "Mobile AI" },
+    { href: "#agent", label: "AI Agent" },
+    { href: "#pricing", label: "Pricing" },
+    { href: "#stack", label: "Stack" },
   ];
 
   return (
     <>
-      {/* ═══ Hidden PDF Template (off-screen, always rendered) ═══ */}
-      <div
-        ref={pdfRef}
-        data-pdf-template
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          left: '-99999px',
-          top: 0,
-          width: 1200,
-          zIndex: -1,
-          pointerEvents: 'none',
-        }}
+      <motion.nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-surface/80 backdrop-blur-xl border-b border-border" : "bg-transparent"}`}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <PdfTemplate />
-      </div>
-
-      {/* ═══ WEBSITE ═══ */}
-      <div className="bg-mesh min-h-screen text-white relative overflow-hidden">
-        {/* Background orbs */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div
-            className="absolute w-[300px] sm:w-[400px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[600px] rounded-full opacity-[0.03]"
-            style={{ background: 'radial-gradient(circle, #6366f1, transparent)', top: `${-100 + scrollY * 0.05}px`, right: '-100px' }}
-          />
-          <div
-            className="absolute w-[200px] sm:w-[300px] md:w-[400px] h-[200px] sm:h-[300px] md:h-[400px] rounded-full opacity-[0.04]"
-            style={{ background: 'radial-gradient(circle, #06b6d4, transparent)', bottom: `${-50 + scrollY * 0.03}px`, left: '-50px' }}
-          />
-        </div>
-
-        {/* Download Button */}
-        <button
-          onClick={handleDownloadPDF}
-          disabled={isGeneratingPDF}
-          className="fixed top-3 sm:top-6 right-3 sm:right-6 z-50 flex items-center gap-1.5 sm:gap-2 bg-brand-600 hover:bg-brand-500 disabled:bg-brand-800 text-white px-3 sm:px-5 py-2 sm:py-3 rounded-full shadow-lg shadow-brand-600/30 transition-all hover:scale-105 disabled:scale-100 cursor-pointer disabled:cursor-wait font-semibold text-xs sm:text-sm"
-        >
-          {isGeneratingPDF ? (
-            <><Loader2 className="w-3.5 sm:w-4 h-3.5 sm:h-4 animate-spin" /> <span className="hidden sm:inline">Generating...</span><span className="sm:hidden">PDF...</span></>
-          ) : (
-            <><Download className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> <span className="hidden sm:inline">Download PDF</span><span className="sm:hidden">PDF</span></>
-          )}
-        </button>
-
-        {/* Loading overlay */}
-        {isGeneratingPDF && (
-          <div className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-slate-900 border border-brand-500/30 rounded-xl sm:rounded-2xl p-5 sm:p-8 text-center max-w-sm w-full mx-4">
-              <Loader2 className="w-8 sm:w-12 h-8 sm:h-12 text-brand-400 animate-spin mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-bold mb-2">Generating PDF</h3>
-              <p className="text-slate-400 text-xs sm:text-sm">Creating your portfolio PDF with all screenshots. This may take a moment...</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <a href="#" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-purple-600 flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform">
+              AC
             </div>
-          </div>
-        )}
+            <span className="font-bold text-lg tracking-tight text-text-primary">ACLLC</span>
+          </a>
 
-        {/* ═══════════════ HERO ═══════════════ */}
-        <header className="relative px-4 sm:px-6 pt-12 sm:pt-16 pb-16 sm:pb-20 md:pt-24 md:pb-28 max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-8 sm:gap-10 md:gap-16">
-            <div className="flex-1 text-center md:text-left order-2 md:order-1">
-              <div className="inline-flex items-center gap-2 bg-brand-950/60 border border-brand-500/30 rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm text-brand-300 mb-4 sm:mb-6">
-                <Sparkles className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-brand-400" />
-                Top Rated · AI Development Agency
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-3 sm:mb-4">
-                We Build <span className="gradient-text">AI Products</span><br className="hidden sm:block" /><span className="sm:hidden"> </span>That Actually Work
-              </h1>
-              <p className="text-sm sm:text-base md:text-lg text-brand-300 font-semibold mb-2 sm:mb-3">{NAME} — AI Development Agency</p>
-              <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed mb-6 sm:mb-8 mx-auto md:mx-0">
-                Fast, clean, and built to scale. From GPT-4 powered SaaS platforms to autonomous AI agents — we turn your AI ideas into production-ready products.
-              </p>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center md:justify-start">
-                <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white px-5 sm:px-7 py-3 sm:py-3.5 rounded-full font-semibold transition-all hover:scale-105 shadow-lg shadow-brand-600/25 text-sm sm:text-base">
-                  <ExternalLink className="w-4 h-4" /> Hire Us on Upwork
-                </a>
-                <a href="#results" className="inline-flex items-center justify-center gap-2 border border-slate-700 hover:border-brand-500/50 text-slate-300 hover:text-white px-5 sm:px-7 py-3 sm:py-3.5 rounded-full font-semibold transition-all text-sm sm:text-base">
-                  See Our Results <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-            {/* Profile Photo */}
-            <div className="flex-shrink-0 order-1 md:order-2">
-              <div className="relative">
-                <div className="w-44 h-56 sm:w-56 sm:h-68 md:w-64 md:h-80 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-brand-600 via-cyan-500 to-emerald-500 p-[3px] animate-float">
-                  <div className="w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950">
-                    <img
-                      src={PROFILE_IMG}
-                      alt={NAME}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="absolute -top-2 sm:-top-3 -right-2 sm:-right-3 bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-sm rounded-lg sm:rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold text-emerald-400 flex items-center gap-1 sm:gap-1.5">
-                  <CheckCircle2 className="w-3 sm:w-3.5 h-3 sm:h-3.5" /> Available Now
-                </div>
-                <div className="absolute -bottom-2 sm:-bottom-3 -left-2 sm:-left-3 bg-amber-500/20 border border-amber-500/40 backdrop-blur-sm rounded-lg sm:rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold text-amber-400 flex items-center gap-1 sm:gap-1.5">
-                  <Star className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-amber-400" /> 5.0 Rating
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Stats */}
-          <div className="mt-12 sm:mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-            {[
-              { val: '5+', label: 'Years Experience', icon: <Clock className="w-4 sm:w-5 h-4 sm:h-5 text-brand-400" /> },
-              { val: '200+', label: 'Projects Delivered', icon: <Award className="w-4 sm:w-5 h-4 sm:h-5 text-cyan-400" /> },
-              { val: '30+', label: 'Countries Served', icon: <Globe className="w-4 sm:w-5 h-4 sm:h-5 text-emerald-400" /> },
-              { val: '100%', label: 'Job Success', icon: <Shield className="w-4 sm:w-5 h-4 sm:h-5 text-amber-400" /> },
-            ].map((s, i) => (
-              <div key={i} className="stat-card rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center card-hover">
-                <div className="flex justify-center mb-2 sm:mb-3">{s.icon}</div>
-                <AnimatedStat value={s.val} />
-                <p className="text-slate-400 text-xs sm:text-sm mt-1 sm:mt-2 font-medium">{s.label}</p>
-              </div>
+          <div className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm text-text-secondary">
+            {links.map((l) => (
+              <a key={l.href} href={l.href} className="hover:text-accent transition-colors font-medium">
+                {l.label}
+              </a>
             ))}
-          </div>
-        </header>
-
-        {/* ═══════════════ WHAT WE BUILD ═══════════════ */}
-        <Section id="services" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-8 sm:mb-10 md:mb-14">
-            <span className="text-brand-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Services</span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">What We Build</h2>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">End-to-end AI solutions — from concept to production. Every project is built for performance, scalability, and real business impact.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-            {SERVICES.map((s, i) => (
-              <div key={i} className={`group relative bg-slate-900/60 backdrop-blur border ${s.border} rounded-xl sm:rounded-2xl p-4 sm:p-6 card-hover hover:shadow-xl ${s.glow}`}>
-                <div className={`inline-flex items-center justify-center w-12 sm:w-14 h-12 sm:h-14 rounded-xl bg-gradient-to-br ${s.color} mb-4 sm:mb-5 [&>svg]:w-6 [&>svg]:sm:w-7 [&>svg]:h-6 [&>svg]:sm:h-7`}>{s.icon}</div>
-                <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 group-hover:text-white transition-colors">{s.title}</h3>
-                <ul className="space-y-2 sm:space-y-3">
-                  {s.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-2 sm:gap-3">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-slate-400 text-xs sm:text-sm leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ═══════════════ RESULTS ═══════════════ */}
-        <Section id="results" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-8 sm:mb-10 md:mb-14">
-            <span className="text-emerald-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Proven Impact</span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">Recent Results</h2>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">Numbers don't lie. Here's the real-world impact our AI solutions have delivered for clients.</p>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-            {results.map((r, i) => (
-              <div key={i} className="group relative overflow-hidden bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-7 card-hover">
-                <div className={`absolute inset-0 bg-gradient-to-br ${
-                  r.color === 'cyan' ? 'from-cyan-500/5 to-transparent' :
-                  r.color === 'brand' ? 'from-brand-500/5 to-transparent' :
-                  r.color === 'emerald' ? 'from-emerald-500/5 to-transparent' :
-                  'from-rose-500/5 to-transparent'
-                } opacity-0 group-hover:opacity-100 transition-opacity`} />
-                <div className="relative flex items-start gap-3 sm:gap-4 md:gap-5">
-                  <div className="flex-shrink-0 w-10 sm:w-12 md:w-14 h-10 sm:h-12 md:h-14 rounded-lg sm:rounded-xl bg-slate-800/80 flex items-center justify-center [&>svg]:w-5 [&>svg]:sm:w-6 [&>svg]:md:w-8 [&>svg]:h-5 [&>svg]:sm:h-6 [&>svg]:md:h-8">{r.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-200 mb-1">{r.title}</h3>
-                    <div className="flex flex-wrap items-baseline gap-1 sm:gap-2 mb-1">
-                      <span className={`text-xl sm:text-2xl md:text-3xl font-black ${
-                        r.color === 'cyan' ? 'text-cyan-400' :
-                        r.color === 'brand' ? 'text-brand-400' :
-                        r.color === 'emerald' ? 'text-emerald-400' :
-                        'text-rose-400'
-                      }`}>{r.metric}</span>
-                      <span className="text-slate-400 text-xs sm:text-sm font-semibold">{r.metricLabel}</span>
-                    </div>
-                    <p className="text-slate-500 text-xs sm:text-sm">{r.detail}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ═══════════════ FEATURED CREATION ═══════════════ */}
-        <Section id="featured" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8 md:mb-10">
-            <span className="text-rose-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Featured Creation</span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">ActLikeYouKnow Platform</h2>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-4 sm:mb-6 px-2">A full-stack AI-powered SaaS platform — designed, built, and deployed from scratch.</p>
             <a
-              href={PLATFORM_URL}
+              href="https://wa.me/212638426738"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 rounded-full px-4 sm:px-6 py-2 sm:py-2.5 text-rose-400 hover:text-rose-300 text-xs sm:text-sm font-semibold transition-all hover:bg-rose-500/20"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 text-accent border border-accent/20 hover:bg-accent/20 transition-all font-semibold"
             >
-              <ExternalLink className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Visit Live Platform
+              <WaSvg cls="w-4 h-4" />
+              Get in Touch
             </a>
           </div>
 
-          {/* Tabs */}
-          <div className="flex justify-center mb-6 sm:mb-8">
-            <div className="inline-flex bg-slate-900/80 border border-slate-700/50 rounded-lg sm:rounded-xl p-1 sm:p-1.5">
-              <button
-                onClick={() => setActiveTab('user')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                  activeTab === 'user'
-                    ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <Monitor className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> User
-              </button>
-              <button
-                onClick={() => setActiveTab('admin')}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                  activeTab === 'admin'
-                    ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/30'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <ShieldCheck className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Admin
-              </button>
+          <button
+            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-light transition-colors"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            <div className="w-5 flex flex-col gap-1.5">
+              <span className={`block h-0.5 bg-text-primary rounded-full transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
+              <span className={`block h-0.5 bg-text-primary rounded-full transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
+              <span className={`block h-0.5 bg-text-primary rounded-full transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} />
             </div>
-          </div>
+          </button>
+        </div>
+      </motion.nav>
 
-          {/* Gallery */}
-          <div className="bg-slate-900/40 backdrop-blur border border-slate-700/30 rounded-xl sm:rounded-2xl p-3 sm:p-6 md:p-8">
-            {activeTab === 'user' ? (
-              <ScreenshotGallery images={USER_DASHBOARD_IMGS} label="User Dashboard" />
-            ) : (
-              <ScreenshotGallery images={ADMIN_DASHBOARD_IMGS} label="Admin Dashboard" />
-            )}
-          </div>
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            className="fixed inset-0 z-40 bg-surface/95 backdrop-blur-xl flex flex-col items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <nav className="flex flex-col items-center gap-6">
+              {links.map((l, i) => (
+                <motion.a
+                  key={l.href}
+                  href={l.href}
+                  className="text-text-secondary hover:text-accent transition-colors text-xl font-medium"
+                  onClick={() => setMobileOpen(false)}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.3 }}
+                >
+                  {l.label}
+                </motion.a>
+              ))}
+              <motion.a
+                href="https://wa.me/212638426738"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 px-8 py-3 rounded-xl bg-accent text-white font-semibold text-lg hover:bg-accent-dark transition-all flex items-center gap-2"
+                onClick={() => setMobileOpen(false)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: links.length * 0.05, duration: 0.3 }}
+              >
+                <WaSvg cls="w-5 h-5" />
+                Get in Touch
+              </motion.a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
-          {/* Platform features */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-6 sm:mt-8">
-            {[
-              { icon: '🤖', label: 'AI-Powered' },
-              { icon: '💳', label: 'Stripe Billing' },
-              { icon: '📊', label: 'Analytics Dashboard' },
-              { icon: '🔐', label: 'Auth & Roles' },
-            ].map((f, i) => (
-              <div key={i} className="bg-slate-900/60 border border-slate-800 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center card-hover">
-                <div className="text-xl sm:text-2xl mb-1 sm:mb-2">{f.icon}</div>
-                <div className="text-xs sm:text-sm font-semibold text-slate-300">{f.label}</div>
-              </div>
-            ))}
-          </div>
-        </Section>
+/* ─── Hero ─── */
+function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -50]);
 
-        {/* ═══════════════ TECH STACK ═══════════════ */}
-        <Section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-8 sm:mb-10 md:mb-14">
-            <span className="text-cyan-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Tech Stack</span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">Tools & Technologies</h2>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-            {techStack.map((group, i) => (
-              <div key={i} className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 card-hover">
-                <h3 className="text-xs sm:text-sm font-bold text-brand-400 uppercase tracking-wider mb-3 sm:mb-4">{group.category}</h3>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {group.items.map((item, j) => (
-                    <span key={j} className="text-[10px] sm:text-xs font-medium bg-slate-800/80 text-slate-300 border border-slate-700/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg">{item}</span>
+  const services = [
+    { icon: "🏗️", label: "SaaS Development" },
+    { icon: "📱", label: "Mobile AI App" },
+    { icon: "🤖", label: "AI Agent" },
+  ];
+
+  return (
+    <div ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="absolute top-1/4 -left-32 w-64 sm:w-96 h-64 sm:h-96 bg-accent/10 rounded-full blur-[100px] sm:blur-[128px] animate-pulse" />
+      <div className="absolute bottom-1/4 -right-32 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500/10 rounded-full blur-[100px] sm:blur-[128px] animate-pulse" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[120px]" />
+
+      <motion.div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center pt-24 sm:pt-0" style={{ opacity, y }}>
+        {/* Badge */}
+        <motion.div
+          className="inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs sm:text-sm font-medium mb-6 sm:mb-8"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            AI Product Engineer
+          </span>
+          <span className="hidden sm:inline text-accent/40">|</span>
+          <span className="text-accent/70">From Concept to Intelligent Application</span>
+        </motion.div>
+
+        {/* Headline */}
+        <motion.h1
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[0.95] mb-6 sm:mb-8"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <span className="text-text-primary">I build </span>
+          <span className="bg-gradient-to-r from-accent via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            intelligent
+          </span>
+          <br />
+          <span className="text-text-primary">applications.</span>
+        </motion.h1>
+
+        {/* Sub */}
+        <motion.p
+          className="text-lg sm:text-xl md:text-2xl text-text-secondary max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-light px-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          SaaS platforms, Mobile AI apps & AI Agents — built end-to-end.{" "}
+          <span className="text-text-primary font-medium">From concept to deployed product.</span>
+        </motion.p>
+
+        {/* 3 Service Badges */}
+        <motion.div
+          className="flex flex-wrap items-center justify-center gap-3 mb-8 sm:mb-10"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.7 }}
+        >
+          {services.map((s) => (
+            <div key={s.label} className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-card border border-border text-sm font-semibold text-text-primary">
+              <span>{s.icon}</span>
+              <span>{s.label}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Stack pills */}
+        <motion.div
+          className="flex flex-wrap items-center justify-center gap-2 mb-8 sm:mb-10"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.65, duration: 0.7 }}
+        >
+          {["Firebase", "Stripe", "Vercel", "LangChain", "OpenAI", "Anthropic", "Next.js"].map((tech) => (
+            <span key={tech} className="px-3 py-1 rounded-full bg-surface-light/80 text-text-secondary text-xs font-mono border border-border">
+              {tech}
+            </span>
+          ))}
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+        >
+          <a
+            href="https://wa.me/212638426738"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative w-full sm:w-auto px-8 py-4 rounded-xl bg-accent text-white font-semibold text-base sm:text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(99,102,241,0.3)] flex items-center justify-center gap-2"
+          >
+            <WaSvg cls="relative z-10 w-5 h-5" />
+            <span className="relative z-10">Let's Build Together</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-accent-dark to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </a>
+          <a
+            href="#services"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl border border-border text-text-secondary font-medium text-base sm:text-lg hover:border-accent/30 hover:text-text-primary transition-all text-center"
+          >
+            See Services ↓
+          </a>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─── Services Overview ─── */
+function ServicesOverview() {
+  const services = [
+    {
+      id: "saas",
+      icon: "🏗️",
+      title: "SaaS Development",
+      tagline: "Full-stack SaaS platforms built to scale",
+      desc: "Custom dashboards, API integrations, Stripe payments, Firebase backend, and Vercel deployment — everything you need to ship a production-ready SaaS product.",
+      color: "from-blue-500 to-cyan-500",
+      glow: "blue",
+      features: ["Custom Dashboards", "API Integration", "Stripe Payments", "Firebase Backend", "Vercel Deploy", "Admin Panels"],
+      cta: "Explore SaaS →",
+      href: "#saas",
+    },
+    {
+      id: "mobile",
+      icon: "📱",
+      title: "Mobile AI App",
+      tagline: "Intelligent mobile apps powered by AI",
+      desc: "React Native & Expo apps with AI capabilities built in — real-time inference, voice, computer vision, on-device intelligence, and seamless cloud sync.",
+      color: "from-purple-500 to-pink-500",
+      glow: "purple",
+      features: ["React Native", "AI Features", "Voice & Vision", "Push Notifications", "Offline-First", "App Store Ready"],
+      cta: "Explore Mobile →",
+      href: "#mobile",
+    },
+    {
+      id: "agent",
+      icon: "🤖",
+      title: "AI Agent",
+      tagline: "Agents that reason, not just respond",
+      desc: "LangChain & LangGraph agents that synthesize multi-source information, handle complex reasoning chains, and take autonomous actions to solve real problems.",
+      color: "from-amber-500 to-orange-500",
+      glow: "amber",
+      features: ["Multi-Agent Systems", "RAG Pipelines", "Tool Use", "Long-Term Memory", "Reasoning Chains", "Custom LLMs"],
+      cta: "Explore Agents →",
+      href: "#agent",
+    },
+  ];
+
+  return (
+    <Section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6" id="services">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-10 sm:mb-16 text-center">
+          <span className="text-accent font-mono text-xs sm:text-sm font-medium tracking-wider uppercase">
+            // What I build
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 text-text-primary tracking-tight">
+            Three services. One expert.
+          </h2>
+          <p className="text-text-secondary text-base sm:text-lg mt-3 sm:mt-4 max-w-2xl mx-auto">
+            End-to-end ownership from design to deployment — no hand-offs, no gaps.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+          {services.map((s, i) => (
+            <motion.div
+              key={s.id}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.12, duration: 0.6 }}
+            >
+              <GlowCard className="p-6 sm:p-8 h-full flex flex-col" glowColor={s.glow}>
+                {/* Icon */}
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center text-2xl sm:text-3xl mb-5 shadow-lg`}>
+                  {s.icon}
+                </div>
+                {/* Title */}
+                <h3 className={`text-xl sm:text-2xl font-bold mb-1 bg-gradient-to-r ${s.color} bg-clip-text text-transparent`}>
+                  {s.title}
+                </h3>
+                <p className="text-text-secondary text-xs sm:text-sm font-medium mb-4">{s.tagline}</p>
+                <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-6 flex-1">{s.desc}</p>
+
+                {/* Feature pills */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {s.features.map((f) => (
+                    <span key={f} className="px-2.5 py-1 rounded-full bg-surface-light text-text-secondary text-[10px] sm:text-xs font-mono border border-border">
+                      {f}
+                    </span>
                   ))}
                 </div>
-              </div>
-            ))}
-          </div>
-        </Section>
 
-        {/* ═══════════════ HOW WE WORK ═══════════════ */}
-        <Section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-8 sm:mb-10 md:mb-14">
-            <span className="text-amber-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Process</span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">How We Work</h2>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">A streamlined, transparent process designed to move fast and deliver results — all async, no calls needed.</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
-            {processSteps.map((step, i) => (
-              <div key={i} className="relative group">
-                <div className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 card-hover h-full">
-                  <div className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 group-hover:text-brand-900 transition-colors mb-2 sm:mb-4">{step.num}</div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-                    <div className="text-brand-400 [&>svg]:w-4 [&>svg]:sm:w-5 [&>svg]:md:w-6 [&>svg]:h-4 [&>svg]:sm:h-5 [&>svg]:md:h-6">{step.icon}</div>
-                    <h3 className="font-bold text-sm sm:text-base md:text-lg">{step.title}</h3>
-                  </div>
-                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{step.desc}</p>
-                </div>
-                {i < 3 && <ArrowRight className="hidden md:block absolute top-1/2 -right-3 md:-right-4 w-4 md:w-5 h-4 md:h-5 text-slate-700 -translate-y-1/2 z-10" />}
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ═══════════════ WHY US ═══════════════ */}
-        <Section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
-          <div className="text-center mb-8 sm:mb-10 md:mb-14">
-            <span className="text-rose-400 text-xs sm:text-sm font-bold tracking-widest uppercase">Why Choose Us</span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mt-2 sm:mt-3 mb-3 sm:mb-4">The Difference</h2>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
-            {[
-              { icon: <Zap className="w-5 sm:w-6 md:w-7 h-5 sm:h-6 md:h-7 text-amber-400" />, title: 'Ship Fast', desc: 'We move at startup speed. Most MVPs are ready in 2–4 weeks. You get weekly demos and constant communication.' },
-              { icon: <Shield className="w-5 sm:w-6 md:w-7 h-5 sm:h-6 md:h-7 text-emerald-400" />, title: 'Production-Grade', desc: 'No throwaway code. Everything is built with clean architecture, proper error handling, testing, and documentation.' },
-              { icon: <TrendingUp className="w-5 sm:w-6 md:w-7 h-5 sm:h-6 md:h-7 text-brand-400" />, title: 'Business-First Thinking', desc: "We don't just write code — we understand your business goals and engineer solutions that drive measurable ROI." },
-            ].map((item, i) => (
-              <div key={i} className="bg-slate-900/60 backdrop-blur border border-slate-800 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 card-hover text-center">
-                <div className="w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 rounded-xl sm:rounded-2xl bg-slate-800/80 flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5">{item.icon}</div>
-                <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3">{item.title}</h3>
-                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ═══════════════ TESTIMONIAL ═══════════════ */}
-        <Section className="px-4 sm:px-6 py-10 sm:py-12 md:py-16 max-w-6xl mx-auto">
-          <div className="relative overflow-hidden bg-gradient-to-r from-brand-950 via-slate-900 to-brand-950 border border-brand-500/20 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12">
-            <div className="absolute top-0 right-0 w-48 sm:w-72 h-48 sm:h-72 bg-brand-500/5 rounded-full blur-3xl" />
-            <div className="relative text-center max-w-3xl mx-auto">
-              <div className="flex justify-center gap-0.5 sm:gap-1 mb-3 sm:mb-5">
-                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6 text-amber-400 fill-amber-400" />)}
-              </div>
-              <blockquote className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-slate-200 leading-relaxed mb-4 sm:mb-6 italic px-2">
-                "Exceptional AI development team. Delivered a complex GPT-4 integrated platform ahead of schedule with impeccable code quality. Already planning our next project together."
-              </blockquote>
-              <div className="text-slate-400 text-xs sm:text-sm font-semibold">— Startup Founder, USA</div>
-            </div>
-          </div>
-        </Section>
-
-        {/* ═══════════════ CTA ═══════════════ */}
-        <Section id="contact" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-6xl mx-auto">
-          <div className="relative overflow-hidden bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-16 text-center">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
-            <div className="relative">
-              <Sparkles className="w-8 sm:w-10 h-8 sm:h-10 text-brand-200 mx-auto mb-4 sm:mb-5" />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-3 sm:mb-4">Ready to Build Something Amazing?</h2>
-              <p className="text-brand-200 text-sm sm:text-base md:text-lg max-w-xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2">
-                Send us your project brief on Upwork. We typically respond within 2 hours and can start within the week.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-                <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-brand-700 hover:text-brand-800 px-5 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base md:text-lg shadow-xl hover:scale-105 transition-all">
-                  <ExternalLink className="w-4 sm:w-5 h-4 sm:h-5" /> Hire Us on Upwork
+                <a
+                  href={s.href}
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r ${s.color} text-white text-sm font-semibold hover:scale-105 transition-all w-fit`}
+                >
+                  {s.cta}
                 </a>
+              </GlowCard>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ─── SaaS Development Detail ─── */
+function SaasSection() {
+  const features = [
+    { icon: "🎨", title: "Custom Dashboards", desc: "Admin panels, analytics, data viz, role-based access, real-time data — pixel-perfect UI on Next.js + Tailwind.", tags: ["Next.js", "Tailwind", "Recharts", "RBAC"] },
+    { icon: "🔗", title: "API Integration", desc: "REST & GraphQL APIs, third-party integrations, webhooks, real-time sync, error handling — production-grade.", tags: ["REST", "GraphQL", "Webhooks", "Real-time"] },
+    { icon: "💳", title: "Stripe Payments", desc: "Subscriptions, usage-based billing, one-time payments, invoicing, customer portal, metered billing.", tags: ["Subscriptions", "Usage Billing", "Invoicing", "Portal"] },
+    { icon: "🔥", title: "Firebase Backend", desc: "Auth (OAuth, email, phone), Firestore, Cloud Functions, real-time listeners, storage, and security rules.", tags: ["Auth", "Firestore", "Functions", "Storage"] },
+    { icon: "☁️", title: "Vercel Deployment", desc: "CI/CD pipelines, preview environments, edge functions, custom domains, environment management, monitoring.", tags: ["CI/CD", "Edge Functions", "Domains", "Monitoring"] },
+    { icon: "📊", title: "Analytics & Admin", desc: "Custom admin panels, user management, analytics dashboards, audit logs, and business intelligence views.", tags: ["Admin Panel", "User Mgmt", "Analytics", "Audit Logs"] },
+  ];
+
+  const packages = [
+    {
+      name: "SaaS Starter",
+      price: "$2,500",
+      priceTo: "$4,000",
+      delivery: "1–2 weeks",
+      bestFor: "MVPs, early validation, founders building fast",
+      color: "from-blue-500 to-cyan-500",
+      features: [
+        "Next.js dashboard (template-based)",
+        "Firebase Auth + Firestore",
+        "Stripe checkout (one-time)",
+        "3 core pages",
+        "Vercel deployment",
+        "Mobile responsive",
+        "Basic admin view",
+      ],
+    },
+    {
+      name: "SaaS Professional",
+      price: "$6,000",
+      priceTo: "$10,000",
+      delivery: "3–4 weeks",
+      bestFor: "Early-stage startups, SaaS teams shipping fast",
+      color: "from-purple-500 to-indigo-500",
+      popular: true,
+      features: [
+        "Custom dashboard + analytics",
+        "Full API integration layer",
+        "Stripe subscriptions + webhooks",
+        "Firebase full backend",
+        "8+ custom pages",
+        "Admin panel + user dashboard",
+        "Role-based access control",
+        "14 days post-launch support",
+      ],
+    },
+    {
+      name: "SaaS Enterprise",
+      price: "$12,000",
+      priceTo: "$20,000",
+      delivery: "6–8 weeks",
+      bestFor: "Scaling companies, complex product requirements",
+      color: "from-amber-500 to-orange-500",
+      features: [
+        "Complete SaaS platform",
+        "AI-powered features built-in",
+        "Advanced Stripe billing (metered, seats)",
+        "Multi-tenant architecture",
+        "Custom API integrations",
+        "Advanced admin + analytics",
+        "Performance optimization",
+        "30 days dedicated support",
+      ],
+    },
+  ];
+
+  return (
+    <Section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6" id="saas">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-10 sm:mb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-xl">🏗️</div>
+            <span className="text-accent font-mono text-xs sm:text-sm font-medium tracking-wider uppercase">// SaaS Development</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary tracking-tight">
+            Full-stack SaaS,{" "}
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">start to finish</span>
+          </h2>
+          <p className="text-text-secondary text-base sm:text-lg mt-4 max-w-2xl leading-relaxed">
+            Dashboard, database, payments, deployment — owned entirely. No hand-offs, no gaps, no excuses.
+          </p>
+        </div>
+
+        {/* Feature Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-16 sm:mb-20">
+          {features.map((f, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.5 }}>
+              <GlowCard className="p-5 sm:p-6 h-full" glowColor="blue">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-xl border border-blue-500/20">{f.icon}</div>
+                  <h3 className="font-bold text-text-primary text-sm sm:text-base">{f.title}</h3>
+                </div>
+                <p className="text-text-secondary text-xs sm:text-sm leading-relaxed mb-4">{f.desc}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {f.tags.map((t) => (
+                    <span key={t} className="px-2 py-0.5 rounded-full bg-surface-light text-text-secondary text-[10px] font-mono border border-border">{t}</span>
+                  ))}
+                </div>
+              </GlowCard>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Architecture */}
+        <motion.div className="mb-16 sm:mb-20" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <div className="rounded-2xl border border-border bg-surface-card/60 p-6 sm:p-10 overflow-x-auto">
+            <h3 className="text-lg sm:text-xl font-bold text-text-primary mb-8 text-center">Full-Stack Architecture</h3>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-2 min-w-max mx-auto">
+              {[
+                { label: "FRONTEND", icon: "🎨", color: "blue", items: ["Next.js", "React", "Tailwind"] },
+                { label: "API LAYER", icon: "🔗", color: "purple", items: ["REST APIs", "Webhooks", "Real-time"] },
+                { label: "BACKEND", icon: "🔥", color: "orange", items: ["Firebase", "Stripe", "Auth"] },
+                { label: "DEPLOYMENT", icon: "☁️", color: "green", items: ["Vercel", "CI/CD", "Monitoring"] },
+              ].map((block, i, arr) => (
+                <div key={block.label} className="flex sm:flex-row flex-col items-center gap-2 sm:gap-2">
+                  <div className={`rounded-xl border border-${block.color}-500/30 bg-${block.color}-500/5 p-4 text-center min-w-[130px]`}>
+                    <div className="text-2xl mb-2">{block.icon}</div>
+                    <div className={`text-xs font-bold text-${block.color}-400 mb-2`}>{block.label}</div>
+                    <div className="space-y-1">
+                      {block.items.map((item) => (
+                        <div key={item} className="text-[10px] text-text-secondary font-mono bg-surface-light/50 rounded px-2 py-0.5">{item}</div>
+                      ))}
+                    </div>
+                  </div>
+                  {i < arr.length - 1 && <span className="text-accent text-lg rotate-90 sm:rotate-0">→</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* SaaS Pricing */}
+        <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">💰 SaaS Pricing</h3>
+        <p className="text-text-secondary text-sm sm:text-base mb-8">Everything included. No hidden fees.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 mb-10">
+          {packages.map((pkg, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }} className="relative">
+              {pkg.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-accent to-purple-500 text-white text-xs font-bold z-10 whitespace-nowrap">
+                  ⭐ MOST POPULAR
+                </div>
+              )}
+              <GlowCard className={`p-6 sm:p-7 h-full flex flex-col ${pkg.popular ? "border-accent/40 ring-1 ring-accent/20" : ""}`}>
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r ${pkg.color} text-white text-xs font-semibold w-fit mb-4`}>{pkg.name}</div>
+                <div className="mb-2">
+                  <span className="text-2xl sm:text-3xl font-black text-text-primary">{pkg.price}</span>
+                  <span className="text-text-secondary text-sm"> – {pkg.priceTo}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-text-secondary mb-5">
+                  <span className="text-green-400">⏱</span>{pkg.delivery} delivery
+                </div>
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {pkg.features.map((f, j) => (
+                    <li key={j} className="flex items-start gap-2 text-sm text-text-secondary">
+                      <span className="text-green-400 mt-0.5 shrink-0">✓</span>{f}
+                    </li>
+                  ))}
+                </ul>
+                <div className="pt-4 border-t border-border">
+                  <p className="text-xs text-text-secondary"><span className="text-accent font-semibold">Best for:</span> {pkg.bestFor}</p>
+                </div>
+              </GlowCard>
+            </motion.div>
+          ))}
+        </div>
+        <div className="text-center">
+          <a
+            href="https://wa.me/212638426738?text=Hi!%20I'm%20interested%20in%20building%20a%20SaaS%20product."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold text-base sm:text-lg hover:scale-105 transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.3)]"
+          >
+            <WaSvg /> Start Your SaaS Project →
+          </a>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ─── Mobile AI App Section ─── */
+function MobileSection() {
+  const features = [
+    { icon: "⚛️", title: "React Native & Expo", desc: "Cross-platform iOS & Android apps with a single codebase. Native performance, native feel, web fallback.", tags: ["React Native", "Expo", "iOS", "Android"] },
+    { icon: "🧠", title: "On-Device AI", desc: "Edge inference, on-device models, offline AI capabilities — smart apps that work without internet.", tags: ["Edge AI", "Offline", "On-Device", "TensorFlow Lite"] },
+    { icon: "🎙️", title: "Voice & Vision", desc: "Speech-to-text, text-to-speech, camera AI, object detection, OCR, and computer vision features.", tags: ["STT", "TTS", "Vision AI", "OCR"] },
+    { icon: "🔔", title: "Push & Real-time", desc: "Firebase push notifications, real-time Firestore sync, background tasks, and live data updates.", tags: ["Push Notifications", "Firebase", "Real-time", "Background Sync"] },
+    { icon: "🔐", title: "Auth & Security", desc: "Biometrics, OAuth, email/phone auth, secure storage, certificate pinning, and end-to-end encryption.", tags: ["Biometrics", "OAuth", "Secure Storage", "E2E Encryption"] },
+    { icon: "🚀", title: "App Store Deploy", desc: "End-to-end publishing to Apple App Store & Google Play — certificates, metadata, screenshots, review.", tags: ["App Store", "Google Play", "ASO", "CI/CD"] },
+  ];
+
+  const packages = [
+    {
+      name: "Mobile AI Starter",
+      price: "$3,000",
+      priceTo: "$5,000",
+      delivery: "2–3 weeks",
+      bestFor: "MVPs, early traction, idea validation",
+      color: "from-purple-500 to-pink-500",
+      features: [
+        "React Native + Expo",
+        "1 AI feature (voice or vision)",
+        "Firebase Auth + Firestore",
+        "Push notifications",
+        "5 core screens",
+        "iOS + Android build",
+        "App Store submission guidance",
+      ],
+    },
+    {
+      name: "Mobile AI Pro",
+      price: "$7,000",
+      priceTo: "$12,000",
+      delivery: "4–6 weeks",
+      bestFor: "Startups, AI-native mobile products",
+      color: "from-indigo-500 to-purple-500",
+      popular: true,
+      features: [
+        "Full React Native app",
+        "Multiple AI features",
+        "On-device + cloud inference",
+        "Firebase full backend",
+        "Stripe in-app purchases",
+        "Offline-first architecture",
+        "15+ screens",
+        "14 days post-launch support",
+      ],
+    },
+    {
+      name: "Mobile AI Enterprise",
+      price: "$15,000",
+      priceTo: "$25,000",
+      delivery: "8–12 weeks",
+      bestFor: "Companies building AI-native mobile platforms",
+      color: "from-pink-500 to-rose-500",
+      features: [
+        "Complete AI mobile platform",
+        "Custom ML model integration",
+        "Advanced on-device intelligence",
+        "Multi-platform (iOS, Android, Web)",
+        "Complex Stripe billing",
+        "Admin web dashboard",
+        "Analytics + crash reporting",
+        "30 days dedicated support",
+      ],
+    },
+  ];
+
+  return (
+    <Section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6" id="mobile">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-10 sm:mb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl">📱</div>
+            <span className="text-accent font-mono text-xs sm:text-sm font-medium tracking-wider uppercase">// Mobile AI App</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary tracking-tight">
+            AI in your pocket,{" "}
+            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">built to ship</span>
+          </h2>
+          <p className="text-text-secondary text-base sm:text-lg mt-4 max-w-2xl leading-relaxed">
+            React Native apps with real AI capabilities — voice, vision, on-device intelligence, and seamless cloud sync.
+          </p>
+        </div>
+
+        {/* Feature Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-16 sm:mb-20">
+          {features.map((f, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.5 }}>
+              <GlowCard className="p-5 sm:p-6 h-full" glowColor="purple">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-xl border border-purple-500/20">{f.icon}</div>
+                  <h3 className="font-bold text-text-primary text-sm sm:text-base">{f.title}</h3>
+                </div>
+                <p className="text-text-secondary text-xs sm:text-sm leading-relaxed mb-4">{f.desc}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {f.tags.map((t) => (
+                    <span key={t} className="px-2 py-0.5 rounded-full bg-surface-light text-text-secondary text-[10px] font-mono border border-border">{t}</span>
+                  ))}
+                </div>
+              </GlowCard>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* What makes it intelligent */}
+        <motion.div
+          className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-pink-500/5 p-6 sm:p-10 mb-16 sm:mb-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h3 className="text-xl sm:text-2xl font-bold text-text-primary mb-6 text-center">What makes it an AI app — not just a mobile app</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: "🧠", label: "Understands context", sub: "Not just commands" },
+              { icon: "👁️", label: "Sees & interprets", sub: "Camera, vision, OCR" },
+              { icon: "🎙️", label: "Listens & speaks", sub: "Natural voice UX" },
+              { icon: "📈", label: "Learns from use", sub: "Gets smarter over time" },
+            ].map((item, i) => (
+              <div key={i} className="text-center p-4 rounded-xl bg-surface-card border border-border">
+                <div className="text-3xl mb-2">{item.icon}</div>
+                <p className="text-text-primary font-semibold text-sm">{item.label}</p>
+                <p className="text-text-secondary text-xs mt-1">{item.sub}</p>
               </div>
-              <div className="mt-4 sm:mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 sm:px-6 py-2 sm:py-2.5 max-w-full overflow-hidden">
-                <Globe className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-brand-200 flex-shrink-0" />
-                <span className="text-brand-100 text-[10px] sm:text-xs md:text-sm font-medium truncate">{UPWORK_URL}</span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Mobile Pricing */}
+        <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">💰 Mobile AI Pricing</h3>
+        <p className="text-text-secondary text-sm sm:text-base mb-8">iOS + Android. AI included. Ready to ship.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 mb-10">
+          {packages.map((pkg, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }} className="relative">
+              {pkg.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold z-10 whitespace-nowrap">
+                  ⭐ MOST POPULAR
+                </div>
+              )}
+              <GlowCard className={`p-6 sm:p-7 h-full flex flex-col ${pkg.popular ? "border-purple-500/40 ring-1 ring-purple-500/20" : ""}`} glowColor="purple">
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r ${pkg.color} text-white text-xs font-semibold w-fit mb-4`}>{pkg.name}</div>
+                <div className="mb-2">
+                  <span className="text-2xl sm:text-3xl font-black text-text-primary">{pkg.price}</span>
+                  <span className="text-text-secondary text-sm"> – {pkg.priceTo}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-text-secondary mb-5">
+                  <span className="text-green-400">⏱</span>{pkg.delivery} delivery
+                </div>
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {pkg.features.map((f, j) => (
+                    <li key={j} className="flex items-start gap-2 text-sm text-text-secondary">
+                      <span className="text-green-400 mt-0.5 shrink-0">✓</span>{f}
+                    </li>
+                  ))}
+                </ul>
+                <div className="pt-4 border-t border-border">
+                  <p className="text-xs text-text-secondary"><span className="text-purple-400 font-semibold">Best for:</span> {pkg.bestFor}</p>
+                </div>
+              </GlowCard>
+            </motion.div>
+          ))}
+        </div>
+        <div className="text-center">
+          <a
+            href="https://wa.me/212638426738?text=Hi!%20I'm%20interested%20in%20building%20a%20Mobile%20AI%20app."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold text-base sm:text-lg hover:scale-105 transition-all hover:shadow-[0_0_40px_rgba(168,85,247,0.3)]"
+          >
+            <WaSvg /> Start Your Mobile App →
+          </a>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ─── AI Agent Section ─── */
+function AgentSection() {
+  const features = [
+    { icon: "🔗", title: "LangChain & LangGraph", desc: "Production-grade agent pipelines with multi-step reasoning, tool orchestration, and complex workflow management.", tags: ["LangChain", "LangGraph", "Tool Use", "Pipelines"] },
+    { icon: "📚", title: "RAG Pipelines", desc: "Retrieval-Augmented Generation over your own data — documents, PDFs, databases, APIs, websites.", tags: ["Vector DB", "Embeddings", "Retrieval", "Pinecone"] },
+    { icon: "🧠", title: "Multi-Agent Systems", desc: "Orchestrated networks of specialized agents that collaborate, delegate, and verify each other's work.", tags: ["Multi-Agent", "Orchestration", "Delegation", "Verification"] },
+    { icon: "💾", title: "Long-Term Memory", desc: "Agents that remember context across sessions — user preferences, past interactions, domain knowledge.", tags: ["Memory", "Context", "Personalization", "Redis"] },
+    { icon: "🛠️", title: "Tool & API Use", desc: "Agents that call APIs, browse the web, write and run code, query databases, and take real actions.", tags: ["Web Browse", "Code Exec", "DB Queries", "API Calls"] },
+    { icon: "🎯", title: "Custom Fine-tuning", desc: "Domain-specific models fine-tuned on your data for specialized tasks that general LLMs can't handle.", tags: ["Fine-tuning", "OpenAI", "Anthropic", "Custom Models"] },
+  ];
+
+  const packages = [
+    {
+      name: "AI Agent Starter",
+      price: "$1,500",
+      priceTo: "$2,500",
+      delivery: "1 week",
+      bestFor: "Indie hackers, MVPs, validating AI ideas",
+      color: "from-amber-500 to-yellow-500",
+      features: [
+        "Single-purpose AI agent",
+        "Basic LangChain setup",
+        "Simple vector database (1K docs)",
+        "Next.js frontend (template)",
+        "Firebase Auth + Firestore",
+        "Stripe checkout",
+        "Vercel deployment",
+      ],
+    },
+    {
+      name: "AI Product Core",
+      price: "$4,500",
+      priceTo: "$7,500",
+      delivery: "2–3 weeks",
+      bestFor: "Early-stage startups, small SaaS teams",
+      color: "from-orange-500 to-amber-500",
+      popular: true,
+      features: [
+        "2 connected AI agents",
+        "RAG with multiple document types",
+        "Custom Next.js UI",
+        "Firebase full backend",
+        "Stripe subscriptions + webhooks",
+        "Basic user dashboard",
+        "14 days post-launch support",
+      ],
+    },
+    {
+      name: "Growth AI System",
+      price: "$9,000",
+      priceTo: "$14,000",
+      delivery: "4–6 weeks",
+      bestFor: "Seed-stage startups, proven products adding AI",
+      color: "from-red-500 to-orange-500",
+      features: [
+        "Multi-agent system (3–4 agents)",
+        "Advanced reasoning workflows",
+        "Scalable vector architecture",
+        "Complete custom application",
+        "Complex Stripe billing",
+        "Admin panel + analytics",
+        "30 days support",
+      ],
+    },
+  ];
+
+  const comparisons = [
+    {
+      bad: "Email goes out when form is submitted",
+      good: "Agent analyzes request, checks 5 data sources, drafts personalized response, flags if human review needed",
+    },
+    {
+      bad: "Zap data from A to B",
+      good: "Synthesize conflicting information and generate novel insights",
+    },
+    {
+      bad: "Chatbot reads your docs and replies",
+      good: "Agent reasons about your problem, searches sources, plans, acts, and delivers results",
+    },
+  ];
+
+  return (
+    <Section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6" id="agent">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-10 sm:mb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-xl">🤖</div>
+            <span className="text-accent font-mono text-xs sm:text-sm font-medium tracking-wider uppercase">// AI Agent</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary tracking-tight">
+            Agents that{" "}
+            <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">think, not trigger</span>
+          </h2>
+          <p className="text-text-secondary text-base sm:text-lg mt-4 max-w-2xl leading-relaxed">
+            I don't do automation. I build intelligence. There's a difference — and it matters enormously.
+          </p>
+        </div>
+
+        {/* Automation vs Intelligence */}
+        <motion.div
+          className="mb-16 sm:mb-20 rounded-2xl border border-border bg-surface-card/60 p-6 sm:p-10"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="rounded-xl border border-border p-5 sm:p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-text-secondary/10 flex items-center justify-center text-xl">⚙️</div>
+                <h3 className="text-lg font-bold text-text-secondary">Automation</h3>
               </div>
-              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 justify-center text-brand-200/80 text-xs sm:text-sm">
-                <span className="flex items-center justify-center gap-2"><Mail className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Quick Response</span>
-                <span className="flex items-center justify-center gap-2"><Clock className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Flexible Hours</span>
-                <span className="flex items-center justify-center gap-2"><MapPin className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> Remote Worldwide</span>
+              <div className="rounded-lg bg-surface-light/50 border border-border p-4">
+                <p className="text-text-secondary font-mono text-sm">"When <span className="text-amber-400">X</span> happens, do <span className="text-amber-400">Y</span>"</p>
+              </div>
+            </div>
+            <div className="rounded-xl border border-accent/30 bg-accent/[0.03] p-5 sm:p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-xl">🧠</div>
+                <h3 className="text-lg font-bold text-accent">Intelligence</h3>
+              </div>
+              <div className="rounded-lg bg-accent/5 border border-accent/20 p-4">
+                <p className="text-text-primary font-mono text-sm">"Given this <span className="text-accent">complex situation</span>, what's the <span className="text-accent">best action</span>?"</p>
               </div>
             </div>
           </div>
-        </Section>
 
-        {/* ═══════════════ FOOTER ═══════════════ */}
-        <footer className="px-4 sm:px-6 py-8 sm:py-10 max-w-6xl mx-auto text-center border-t border-slate-800/50">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-slate-500 text-xs sm:text-sm">
-            <BrainCircuit className="w-4 h-4 text-brand-500" />
-            <span>ACLLC. · AI Development Agency · Built with passion for intelligent software</span>
+          <h4 className="text-base sm:text-lg font-bold text-text-primary mb-4">Real examples:</h4>
+          <div className="space-y-3">
+            {comparisons.map((c, i) => (
+              <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                <div className="rounded-xl border border-red-500/20 bg-red-500/[0.03] p-4 flex items-start gap-3">
+                  <span className="text-red-400 font-bold text-base shrink-0 mt-0.5">✕</span>
+                  <p className="text-text-secondary text-sm leading-relaxed">{c.bad}</p>
+                </div>
+                <div className="rounded-xl border border-green-500/20 bg-green-500/[0.03] p-4 flex items-start gap-3">
+                  <span className="text-green-400 font-bold text-base shrink-0 mt-0.5">✓</span>
+                  <p className="text-text-primary text-sm leading-relaxed">{c.good}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        </footer>
+
+          <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-14 h-14 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                <span className="text-green-400 font-bold text-xl">80%</span>
+              </div>
+              <div>
+                <p className="text-text-primary font-semibold text-sm">Faster research</p>
+                <p className="text-text-secondary text-xs">Time to insight</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-14 h-14 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-2xl">📊</div>
+              <div>
+                <p className="text-text-primary font-semibold text-sm">Better decisions</p>
+                <p className="text-text-secondary text-xs">Quality of output</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Feature Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-16 sm:mb-20">
+          {features.map((f, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.5 }}>
+              <GlowCard className="p-5 sm:p-6 h-full" glowColor="amber">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-xl border border-amber-500/20">{f.icon}</div>
+                  <h3 className="font-bold text-text-primary text-sm sm:text-base">{f.title}</h3>
+                </div>
+                <p className="text-text-secondary text-xs sm:text-sm leading-relaxed mb-4">{f.desc}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {f.tags.map((t) => (
+                    <span key={t} className="px-2 py-0.5 rounded-full bg-surface-light text-text-secondary text-[10px] font-mono border border-border">{t}</span>
+                  ))}
+                </div>
+              </GlowCard>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* AI Agent Pricing */}
+        <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">💰 AI Agent Pricing</h3>
+        <p className="text-text-secondary text-sm sm:text-base mb-8">Intelligence that scales with your ambition.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 mb-10">
+          {packages.map((pkg, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }} className="relative">
+              {pkg.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold z-10 whitespace-nowrap">
+                  ⭐ MOST POPULAR
+                </div>
+              )}
+              <GlowCard className={`p-6 sm:p-7 h-full flex flex-col ${pkg.popular ? "border-amber-500/40 ring-1 ring-amber-500/20" : ""}`} glowColor="amber">
+                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r ${pkg.color} text-white text-xs font-semibold w-fit mb-4`}>{pkg.name}</div>
+                <div className="mb-2">
+                  <span className="text-2xl sm:text-3xl font-black text-text-primary">{pkg.price}</span>
+                  <span className="text-text-secondary text-sm"> – {pkg.priceTo}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-text-secondary mb-5">
+                  <span className="text-green-400">⏱</span>{pkg.delivery} delivery
+                </div>
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {pkg.features.map((f, j) => (
+                    <li key={j} className="flex items-start gap-2 text-sm text-text-secondary">
+                      <span className="text-green-400 mt-0.5 shrink-0">✓</span>{f}
+                    </li>
+                  ))}
+                </ul>
+                <div className="pt-4 border-t border-border">
+                  <p className="text-xs text-text-secondary"><span className="text-amber-400 font-semibold">Best for:</span> {pkg.bestFor}</p>
+                </div>
+              </GlowCard>
+            </motion.div>
+          ))}
+        </div>
+        <div className="text-center">
+          <a
+            href="https://wa.me/212638426738?text=Hi!%20I'm%20interested%20in%20building%20an%20AI%20Agent."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-base sm:text-lg hover:scale-105 transition-all hover:shadow-[0_0_40px_rgba(245,158,11,0.3)]"
+          >
+            <WaSvg /> Build My AI Agent →
+          </a>
+        </div>
       </div>
-    </>
+    </Section>
+  );
+}
+
+/* ─── Combined Pricing Overview ─── */
+function PricingOverview() {
+  const microServices = [
+    { service: "AI Agent Prototype", price: "$750", delivery: "3 days", desc: "Working demo, 1 agent, local setup" },
+    { service: "RAG Setup Only", price: "$500", delivery: "2 days", desc: "Vector DB, document ingestion, retrieval" },
+    { service: "Stripe AI Billing", price: "$600", delivery: "3 days", desc: "Usage-based billing for AI features" },
+    { service: "AI Feature Integration", price: "$800", delivery: "4 days", desc: "Add AI to existing Next.js app" },
+    { service: "Agent Debugging", price: "$400", delivery: "2 days", desc: "Fix broken AI, optimize prompts" },
+    { service: "Vercel + Firebase Deploy", price: "$350", delivery: "2 days", desc: "Production setup, CI/CD, monitoring" },
+  ];
+
+  const hourlyRates = [
+    { service: "AI Development", rate: "$75/hr", minimum: "4 hours ($300)" },
+    { service: "Code Review", rate: "$65/hr", minimum: "3 hours ($195)" },
+    { service: "Consulting", rate: "$85/hr", minimum: "2 hours ($170)" },
+    { service: "Bug Fixes", rate: "$75/hr", minimum: "2 hours ($150)" },
+  ];
+
+  const retainers = [
+    { name: "AI Maintenance Lite", price: "$750", period: "/month", features: ["6 hours development", "Bug fixes & updates", "Basic monitoring", "Email support (48hr)"] },
+    { name: "Growth Partner", price: "$1,800", period: "/month", popular: true, features: ["15 hours dedicated", "Feature development", "Performance optimization", "Priority chat support"] },
+  ];
+
+  const quickWins = [
+    { service: "AI Roadmap Call", price: "$200", desc: "Planning your AI feature" },
+    { service: "Tech Stack Review", price: "$250", desc: "Choosing right tools" },
+    { service: "Prompt Engineering", price: "$300", desc: "Better AI responses" },
+    { service: "Agent Audit Lite", price: "$350", desc: "Quick health check" },
+  ];
+
+  return (
+    <Section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6" id="pricing">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-10 sm:mb-16 text-center">
+          <span className="text-accent font-mono text-xs sm:text-sm font-medium tracking-wider uppercase">// Pricing</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 text-text-primary tracking-tight">
+            Transparent pricing for every stage
+          </h2>
+          <p className="text-text-secondary text-base sm:text-lg mt-3 sm:mt-4 max-w-2xl mx-auto">
+            All services have detailed pricing above. Here are add-ons, micro-services & support options.
+          </p>
+        </div>
+
+        {/* Service Summary */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-16">
+          {[
+            { icon: "🏗️", title: "SaaS Development", range: "$2,500 – $20,000", href: "#saas", color: "from-blue-500 to-cyan-500" },
+            { icon: "📱", title: "Mobile AI App", range: "$3,000 – $25,000", href: "#mobile", color: "from-purple-500 to-pink-500" },
+            { icon: "🤖", title: "AI Agent", range: "$1,500 – $14,000", href: "#agent", color: "from-amber-500 to-orange-500" },
+          ].map((s, i) => (
+            <motion.a
+              key={i}
+              href={s.href}
+              className="block"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+            >
+              <GlowCard className="p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-2xl mx-auto mb-4`}>{s.icon}</div>
+                <h3 className="font-bold text-text-primary mb-1">{s.title}</h3>
+                <p className={`text-sm font-mono font-bold bg-gradient-to-r ${s.color} bg-clip-text text-transparent`}>{s.range}</p>
+                <p className="text-text-secondary text-xs mt-2">View full details →</p>
+              </GlowCard>
+            </motion.a>
+          ))}
+        </div>
+
+        {/* Micro-Services */}
+        <motion.div className="mb-16" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2 flex items-center gap-3">
+            🎯 <span>Micro-Services</span>
+            <span className="text-sm font-normal text-accent bg-accent/10 px-3 py-1 rounded-full">Under $1,000</span>
+          </h3>
+          <p className="text-text-secondary text-sm mb-6">Quick wins, fast delivery, fixed price.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {microServices.map((item, i) => (
+              <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05, duration: 0.4 }}>
+                <GlowCard className="p-5 sm:p-6 h-full">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <h4 className="font-semibold text-text-primary text-sm sm:text-base">{item.service}</h4>
+                    <span className="text-accent font-bold text-sm sm:text-base whitespace-nowrap">{item.price}</span>
+                  </div>
+                  <p className="text-text-secondary text-xs sm:text-sm mb-3">{item.desc}</p>
+                  <div className="flex items-center gap-1.5 text-xs text-text-secondary">
+                    <span className="text-green-400">⚡</span>{item.delivery}
+                  </div>
+                </GlowCard>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Hourly Rates */}
+        <motion.div className="mb-16" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-6 flex items-center gap-3">🔧 Hourly Rates</h3>
+          <div className="rounded-xl border border-border overflow-hidden">
+            <div className="hidden sm:grid grid-cols-3 bg-surface-light/50 border-b border-border text-xs font-semibold text-text-secondary uppercase tracking-wider">
+              <div className="px-5 py-3">Service</div>
+              <div className="px-5 py-3">Rate</div>
+              <div className="px-5 py-3">Minimum</div>
+            </div>
+            {hourlyRates.map((item, i) => (
+              <div key={i} className={`grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-0 px-5 py-4 ${i !== hourlyRates.length - 1 ? "border-b border-border" : ""}`}>
+                <div className="font-medium text-text-primary text-sm sm:text-base">{item.service}</div>
+                <div className="text-accent font-semibold text-sm sm:text-base">{item.rate}</div>
+                <div className="text-text-secondary text-sm">{item.minimum}</div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Retainer Plans */}
+        <motion.div className="mb-16" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-6 flex items-center gap-3">📦 Retainer Plans</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {retainers.map((plan, i) => (
+              <motion.div key={i} className="relative" initial={{ opacity: 0, x: i === 0 ? -20 : 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}>
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-accent to-purple-500 text-white text-xs font-bold z-10">BEST VALUE</div>
+                )}
+                <GlowCard className={`p-6 sm:p-8 h-full ${plan.popular ? "border-accent/40 ring-1 ring-accent/20" : ""}`}>
+                  <h4 className="text-lg sm:text-xl font-bold text-text-primary mb-2">{plan.name}</h4>
+                  <div className="mb-5">
+                    <span className="text-3xl sm:text-4xl font-black text-accent">{plan.price}</span>
+                    <span className="text-text-secondary text-sm">{plan.period}</span>
+                  </div>
+                  <ul className="space-y-3">
+                    {plan.features.map((f, j) => (
+                      <li key={j} className="flex items-start gap-2 text-sm text-text-secondary">
+                        <span className="text-green-400 mt-0.5 shrink-0">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                </GlowCard>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Quick Wins */}
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-6 flex items-center gap-3">
+            🎁 <span>Quick Wins</span>
+            <span className="text-sm font-normal text-green-400 bg-green-400/10 px-3 py-1 rounded-full">Under $500</span>
+          </h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {quickWins.map((item, i) => (
+              <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05, duration: 0.4 }}>
+                <GlowCard className="p-4 sm:p-5 h-full text-center hover:border-green-500/30 transition-colors">
+                  <div className="text-xl sm:text-2xl font-black text-green-400 mb-2">{item.price}</div>
+                  <h4 className="font-semibold text-text-primary text-sm sm:text-base mb-1">{item.service}</h4>
+                  <p className="text-text-secondary text-xs">{item.desc}</p>
+                </GlowCard>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div className="mt-12 sm:mt-16 text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <p className="text-text-secondary text-base sm:text-lg mb-6">
+            Not sure which fits? <span className="text-text-primary font-semibold">Let's figure it out together.</span>
+          </p>
+          <a
+            href="https://wa.me/212638426738?text=Hi!%20I'm%20interested%20in%20getting%20a%20custom%20quote."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent text-white font-semibold text-base sm:text-lg hover:bg-accent-dark transition-all hover:scale-105"
+          >
+            <WaSvg /> Get a Custom Quote →
+          </a>
+        </motion.div>
+      </div>
+    </Section>
+  );
+}
+
+/* ─── Tech Stack ─── */
+function TechStack() {
+  const categories = [
+    { label: "AI & LLMs", color: "text-purple-400", tools: [{ name: "LangChain", cat: "AI Framework" }, { name: "LangGraph", cat: "Agent Orchestration" }, { name: "OpenAI", cat: "LLM Provider" }, { name: "Anthropic", cat: "LLM Provider" }, { name: "Vector DBs", cat: "Data Layer" }] },
+    { label: "Frontend", color: "text-blue-400", tools: [{ name: "Next.js", cat: "Framework" }, { name: "React Native", cat: "Mobile" }, { name: "Expo", cat: "Mobile Platform" }, { name: "Tailwind CSS", cat: "Styling" }] },
+    { label: "Backend & Infra", color: "text-orange-400", tools: [{ name: "Firebase", cat: "Backend" }, { name: "Stripe", cat: "Payments" }, { name: "Vercel", cat: "Deployment" }, { name: "Node.js", cat: "Runtime" }] },
+  ];
+
+  return (
+    <Section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6" id="stack">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-10 sm:mb-16">
+          <span className="text-accent font-mono text-xs sm:text-sm font-medium tracking-wider uppercase">// My stack</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 text-text-primary tracking-tight">Purpose-built toolkit</h2>
+          <p className="text-text-secondary text-base sm:text-lg mt-3 sm:mt-4 max-w-xl">Every tool chosen for production, not demos.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
+          {categories.map((cat, ci) => (
+            <motion.div key={ci} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: ci * 0.1, duration: 0.5 }}>
+              <div className={`text-xs font-bold uppercase tracking-wider mb-4 ${cat.color}`}>{cat.label}</div>
+              <div className="space-y-2">
+                {cat.tools.map((tool, i) => (
+                  <motion.div key={i} whileHover={{ scale: 1.03, x: 4 }} transition={{ duration: 0.2 }}>
+                    <div className="group px-4 py-3 rounded-xl bg-surface-card border border-border hover:border-accent/30 transition-all flex items-center justify-between">
+                      <span className="text-text-primary font-semibold text-sm group-hover:text-accent transition-colors">{tool.name}</span>
+                      <span className="text-text-secondary text-[10px] font-mono">{tool.cat}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ─── Contact ─── */
+function Contact() {
+  return (
+    <Section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6" id="contact">
+      <div className="max-w-4xl mx-auto text-center">
+        <motion.div className="relative" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-purple-500/5 to-pink-500/5 rounded-3xl blur-xl" />
+          <div className="relative rounded-2xl sm:rounded-3xl border border-border bg-surface-card/50 backdrop-blur-sm p-8 sm:p-12 lg:p-16">
+            <div className="text-4xl sm:text-5xl mb-5 sm:mb-6">⚡</div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight mb-4 sm:mb-6 leading-tight">
+              Ready to build something{" "}
+              <span className="bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent">intelligent?</span>
+            </h2>
+            <p className="text-text-secondary text-base sm:text-lg max-w-xl mx-auto mb-8 sm:mb-10 leading-relaxed">
+              DM me if you're building a SaaS, Mobile AI app, or AI Agent that needs real cognition — not just triggers.
+            </p>
+            <a
+              href="https://wa.me/212638426738?text=Hi!%20I'm%20interested%20in%20building%20something%20intelligent."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 rounded-xl bg-accent text-white font-bold text-base sm:text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(99,102,241,0.35)]"
+            >
+              <WaSvg cls="relative z-10 w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="relative z-10">Get in Touch →</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-accent-dark via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    </Section>
+  );
+}
+
+/* ─── Footer ─── */
+function Footer() {
+  return (
+    <footer className="relative z-10 border-t border-border py-8 sm:py-12 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-accent to-purple-600 flex items-center justify-center text-white font-bold text-[10px]">AC</div>
+          <span className="font-semibold text-text-primary text-sm">ACLLC</span>
+          <span className="text-text-secondary text-xs ml-2">AI Product Engineer</span>
+        </div>
+        <div className="flex items-center gap-4 text-xs text-text-secondary">
+          {["#saas", "#mobile", "#agent", "#pricing"].map((href) => (
+            <a key={href} href={href} className="hover:text-accent transition-colors capitalize">{href.replace("#", "")}</a>
+          ))}
+        </div>
+        <p className="text-text-secondary text-xs sm:text-sm text-center sm:text-right">
+          © {new Date().getFullYear()} ACLLC. Building intelligence.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+/* ─── App ─── */
+export default function App() {
+  return (
+    <div className="relative min-h-screen bg-surface overflow-x-hidden">
+      <GridBackground />
+      <ParticleField />
+      <Nav />
+      <Hero />
+      <ServicesOverview />
+      <SaasSection />
+      <MobileSection />
+      <AgentSection />
+      <PricingOverview />
+      <TechStack />
+      <Contact />
+      <Footer />
+      <ChatBot />
+    </div>
   );
 }
